@@ -5,15 +5,6 @@ import androidx.compose.ui.graphics.Color
 val colourWhite = Color.White
 val colourBlack = Color.Black
 
-val colourLight1 = Color(0xFFECF1F7)
-val colourLight2 = Color(0xFFc4d4e7)
-val colourLight3 = Color(0xFF8cafd2)
-val colourMedium = Color(0xFF6a89a7)
-val colourDark3 = Color(0xFF4d647b)
-val colourDark2 = Color(0xFF324252)
-val colourDark1 = Color(0xFF19232c)
-
-
 // Base palette
 val Cream = Color(0xFFF9F1F0)
 val RoseQuartz = Color(0xFFFADCD9)

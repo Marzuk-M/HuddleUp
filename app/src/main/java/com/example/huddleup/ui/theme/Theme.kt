@@ -11,34 +11,37 @@ import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalContext
 
-// Light Color Scheme
+// Light color scheme
 private val LightColorScheme = lightColorScheme(
-    primary = colourMedium,
+    primary = Coral,
     onPrimary = colourWhite,
-    secondary = colourLight3,
-    onSecondary = colourWhite,
-    tertiary = colourLight2,
-    onTertiary = colourBlack,
-    background = colourLight1,
-    onBackground = colourDark1,
-    surface = colourWhite,
-    onSurface = colourDark2
+    secondary = DustyRose,
+    onSecondary = CocoaBrown,
+    background = Cream,
+    onBackground = RosewoodText,
+    surface = RoseQuartz,
+    onSurface = BlushText,
+    primaryContainer = LightPrimaryContainer,
+    secondaryContainer = LightSecondaryContainer,
+    surfaceVariant = SurfaceVariantLight,
+    onSurfaceVariant = CocoaBrown
 )
 
-// Dark Color Scheme
+// Optionally, define a dark theme here
 private val DarkColorScheme = darkColorScheme(
-    primary = colourLight2,
-    onPrimary = colourDark1,
-    secondary = colourLight3,
-    onSecondary = colourDark2,
-    tertiary = colourMedium,
-    onTertiary = colourWhite,
-    background = colourDark1,
-    onBackground = colourLight1,
-    surface = colourDark2,
-    onSurface = colourLight2
+    primary = Coral,
+    onPrimary = colourBlack,
+    secondary = DustyRose,
+    onSecondary = colourWhite,
+    background = CocoaBrown,
+    onBackground = Cream,
+    surface = RosewoodText,
+    onSurface = Cream,
+    primaryContainer = CocoaBrown,
+    secondaryContainer = RosewoodText,
+    surfaceVariant = BlushText,
+    onSurfaceVariant = Cream
 )
-
 @Composable
 fun HuddleUpTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),

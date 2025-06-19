@@ -25,11 +25,13 @@ import com.example.huddleup.ui.theme.HuddleUpTheme
 class MainActivity : ComponentActivity() {
 
     private fun checkIfDisabledNavBarRoute(route: String): Boolean {
+        if (route == Routes.LOGIN) return false
+        if (route == Routes.SIGNUP) return false
         return true // TODO: ADD LOGIC TO DISABLE THE NAVBAR FOR CERTAIN SCREENS
     }
 
     private fun isUserLoggedIn(): Boolean {
-        return true // TODO: CHECK IF USER IS LOGGED IN
+        return false // TODO: CHECK IF USER IS LOGGED IN
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -38,7 +40,7 @@ class MainActivity : ComponentActivity() {
         setContent {
             HuddleUpTheme {
                 val navController = rememberNavController()
-                val selectedScreenRoute = remember { mutableStateOf(Routes.DASHBOARD) }
+                val selectedScreenRoute = remember { mutableStateOf(if (isUserLoggedIn()) Routes.DASHBOARD else Routes.LOGIN) }
 
                 Scaffold(bottomBar = {
                     if (checkIfDisabledNavBarRoute(selectedScreenRoute.value)) {
