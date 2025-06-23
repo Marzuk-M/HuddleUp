@@ -1,1 +1,1 @@
-ADD SERVER CODE HERE
+This directory hosts the Express.js code for the HuddleUp server.

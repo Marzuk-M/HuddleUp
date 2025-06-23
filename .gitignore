@@ -13,3 +13,10 @@
 .externalNativeBuild
 .cxx
 local.properties
+
+# Server Related
+server/node_modules
+server/node_modules/*
+server/package-lock.json
+server/.env
+server/firebase-service-account-key.json

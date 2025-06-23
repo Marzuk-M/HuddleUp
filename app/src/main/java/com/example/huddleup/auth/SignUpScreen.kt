@@ -28,7 +28,7 @@ fun SignUpScreen(
 ) {
     var firstName = remember { mutableStateOf("") }
     var lastName = remember { mutableStateOf("") }
-    var dob = remember { mutableStateOf("") }
+    var dob = remember { mutableStateOf("") } // TODO: REPLACE THIS WITH DATE PICKER
     var username = remember { mutableStateOf("") }
     var email = remember { mutableStateOf("") }
     var password = remember { mutableStateOf("") }
@@ -102,7 +102,7 @@ fun SignUpScreen(
                     contentColor = CocoaBrown
                 )
             ) {
-                Text(text = "Sign up", fontWeight = FontWeight.Bold)
+                Text(text = "Sign Up!", fontWeight = FontWeight.Bold)
             }
 
             HUTextFieldSpacer(modifier = Modifier.weight(1f))
