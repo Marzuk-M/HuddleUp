@@ -1,5 +1,7 @@
 package com.example.huddleup
 
+import com.google.firebase.auth.FirebaseAuth
+
 // Navigation Related Utility
 object NavigationUtils {
 
@@ -12,6 +14,6 @@ object NavigationUtils {
 
     // check if user is logged in
     fun isUserLoggedIn(): Boolean {
-        return false // TODO: CHECK IF USER IS LOGGED IN
+        return FirebaseAuth.getInstance().currentUser != null
     }
 }

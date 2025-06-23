@@ -10,6 +10,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
@@ -21,11 +22,15 @@ import com.example.huddleup.sharedcomponents.HUDividerWithText
 import com.example.huddleup.sharedcomponents.HUTextButton
 import com.example.huddleup.sharedcomponents.HUTextField
 import com.example.huddleup.sharedcomponents.HUTextFieldSpacer
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 @Composable
 fun SignUpScreen(
     navController: NavController
 ) {
+    val context = LocalContext.current
     var firstName = remember { mutableStateOf("") }
     var lastName = remember { mutableStateOf("") }
     var dob = remember { mutableStateOf("") } // TODO: REPLACE THIS WITH DATE PICKER
@@ -89,7 +94,25 @@ fun SignUpScreen(
 
             // TODO: MAYBE REPLACE THIS WITH SHARED COMPONENT THIS LATER
             OutlinedButton(
-                onClick = { /* Handle signup */ },
+                onClick = {
+                    CoroutineScope(Dispatchers.Main).launch {
+                        AuthService.signup(
+                            email = email.value,
+                            password = password.value,
+                            firstName = firstName.value,
+                            lastName = lastName.value,
+                            username = username.value,
+                            dateOfBirth = dob.value,
+                            onSuccess = {
+                                navController.navigate(Routes.LOGIN) {
+                                    popUpTo(Routes.SIGNUP) { inclusive = true }
+                                }
+                            },
+                            onFailure = { },
+                            context = context
+                        )
+                    }
+                },
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(48.dp),

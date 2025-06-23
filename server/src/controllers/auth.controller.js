@@ -32,7 +32,7 @@ exports.signup = async (req, res) => {
 };
 
 exports.isUsernameTaken = async (req, res) => {
-  const { username } = req.body;
+  const username = req.params.username;
 
   try {
     const result = await authService.isUsernameTaken(username);

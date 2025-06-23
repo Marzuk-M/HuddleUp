@@ -8,7 +8,7 @@ const authenticateToken = require('./middlewares/auth.middleware');
 
 // Auth Routes
 router.post('/auth/signup', authController.signup);
-router.get('/auth/username', authController.isUsernameTaken);
+router.get('/auth/username/:username', authController.isUsernameTaken);
 
 // Dashboard Routes
 router.get('/dashboard/test', authenticateToken, dashboardController.test);

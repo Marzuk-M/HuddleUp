@@ -4,16 +4,14 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -38,6 +36,21 @@ class MainActivity : ComponentActivity() {
                 val startRoute = if (NavigationUtils.isUserLoggedIn()) Routes.DASHBOARD else Routes.LOGIN
                 val navController = rememberNavController()
                 val selectedScreenRoute = remember { mutableStateOf(startRoute)}
+
+                LaunchedEffect(Unit) {
+                    if (NavigationUtils.isUserLoggedIn()) {
+                        navController.navigate(Routes.DASHBOARD) {
+                            popUpTo(Routes.LOGIN) { inclusive = true } // Prevent back navigation to login/signup
+                        }
+                    }
+                }
+
+                LaunchedEffect(navController) {
+                    navController.currentBackStackEntryFlow.collect { backStackEntry ->
+                        selectedScreenRoute.value =
+                            backStackEntry.destination.route ?: Routes.DASHBOARD
+                    }
+                }
 
                 Scaffold(
                     containerColor = MaterialTheme.colorScheme.background,

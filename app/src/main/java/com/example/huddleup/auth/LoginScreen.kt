@@ -21,13 +21,16 @@ import com.example.huddleup.sharedcomponents.HUTextButton
 import com.example.huddleup.sharedcomponents.HUTextField
 import com.example.huddleup.sharedcomponents.HUTextFieldSpacer
 import com.example.huddleup.sharedcomponents.PageHeader
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 @Composable
 fun LoginScreen(
     navController: NavController
 ) {
-    val email = remember { mutableStateOf("") }
-    val password = remember { mutableStateOf("") }
+    var email = remember { mutableStateOf("") }
+    var password = remember { mutableStateOf("") }
 
     Scaffold (topBar = { PageHeader(title = "HuddleUp") }) {
         Column(
@@ -54,7 +57,18 @@ fun LoginScreen(
 
             // TODO: MAYBE REPLACE THIS WITH SHARED COMPONENT THIS LATER
             OutlinedButton (
-                onClick = {},
+                onClick = {
+                    AuthService.login(
+                        email.value,
+                        password.value,
+                        onSuccess = {
+                            navController.navigate(Routes.DASHBOARD) {
+                                popUpTo(Routes.LOGIN) { inclusive = true }
+                            }
+                        },
+                        onFailure = {}
+                    )
+                },
                 modifier = Modifier.fillMaxWidth(),
             ) {
                 Text("Login", color = MaterialTheme.colorScheme.primary)
