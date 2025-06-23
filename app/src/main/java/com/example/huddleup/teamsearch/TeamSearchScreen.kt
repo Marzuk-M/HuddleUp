@@ -151,10 +151,10 @@ fun TeamListItem(team: Team) {
     }
 }
 
-@Preview(showBackground = true)
-@Composable
-fun TeamSearchScreenPreview() {
-    HuddleUpTheme {
-        TeamSearchScreen(rememberNavController())
-    }
-}
+//@Preview(showBackground = true)
+//@Composable
+//fun TeamSearchScreenPreview() {
+//    HuddleUpTheme() {
+//        TeamSearchScreen(rememberNavController())
+//    }
+//}

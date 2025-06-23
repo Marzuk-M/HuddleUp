@@ -1,86 +1,93 @@
 package com.example.huddleup.auth
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material3.*
-import androidx.compose.runtime.*
-import androidx.compose.ui.Alignment
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedButton
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.text.input.PasswordVisualTransformation
-import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.huddleup.Routes
+import com.example.huddleup.sharedcomponents.PageHeader
 import com.example.huddleup.ui.theme.CocoaBrown
+import com.example.huddleup.sharedcomponents.HUDividerWithText
+import com.example.huddleup.sharedcomponents.HUTextButton
+import com.example.huddleup.sharedcomponents.HUTextField
+import com.example.huddleup.sharedcomponents.HUTextFieldSpacer
 
 @Composable
 fun SignUpScreen(
     navController: NavController
 ) {
-    val lightPink = Color(0xFFFDEFEF)
+    var firstName = remember { mutableStateOf("") }
+    var lastName = remember { mutableStateOf("") }
+    var dob = remember { mutableStateOf("") }
+    var username = remember { mutableStateOf("") }
+    var email = remember { mutableStateOf("") }
+    var password = remember { mutableStateOf("") }
+    var confirmPassword = remember { mutableStateOf("") }
 
-    Scaffold(
-        containerColor = lightPink,
-        topBar = {
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(24.dp),
-                contentAlignment = Alignment.Center
-            ) {
-                Text(
-                    text = "HuddleUp",
-                    style = MaterialTheme.typography.headlineMedium,
-                    fontWeight = FontWeight.Bold,
-                    color = CocoaBrown
-                )
-            }
-        }
-    ) { innerPadding ->
+    Scaffold(topBar = { PageHeader(title = "HuddleUp") }) {
         Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(lightPink)
-                .padding(
-                    top = innerPadding.calculateTopPadding(),
-                    start = 24.dp,
-                    end = 24.dp
-                ),
-            verticalArrangement = Arrangement.Top
+            modifier = Modifier.padding(top = it.calculateTopPadding(), start = 16.dp, end = 16.dp)
         ) {
-            // State variables
-            var firstName by remember { mutableStateOf("") }
-            var lastName by remember { mutableStateOf("") }
-            var dob by remember { mutableStateOf("") }
-            var username by remember { mutableStateOf("") }
-            var email by remember { mutableStateOf("") }
-            var password by remember { mutableStateOf("") }
-            var confirmPassword by remember { mutableStateOf("") }
-
-            CustomTextField("First Name", firstName) { firstName = it }
-            CustomTextField("Last Name", lastName) { lastName = it }
-            CustomTextField("Date of Birth", dob) { dob = it }
-            CustomTextField("Username", username) { username = it }
-            Spacer(modifier = Modifier.height(8.dp))
-            Divider(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(1.dp),
-                    //.padding(top = 24.dp, bottom = 24.dp),
-                color = CocoaBrown
+            HUTextFieldSpacer()
+            HUTextField(
+                value = firstName,
+                label = "First Name"
             )
-            Spacer(modifier = Modifier.height(8.dp))
-            CustomTextField("Email", email, keyboardType = KeyboardType.Email) { email = it }
-            CustomTextField("Password", password, keyboardType = KeyboardType.Password, isPassword = true) { password = it }
-            CustomTextField("Confirm Password", confirmPassword, keyboardType = KeyboardType.Password, isPassword = true) { confirmPassword = it }
 
-            Spacer(modifier = Modifier.height(16.dp))
+            HUTextFieldSpacer()
+            HUTextField(
+                value = lastName,
+                label = "Last Name"
+            )
 
-            // Sign Up Button
+            HUTextFieldSpacer()
+            HUTextField(
+                value = dob,
+                label = "Date of Birth",
+                keyboardType = KeyboardType.Text // TODO: Fix this to add date picker
+            )
+
+            HUDividerWithText(text = "Authentication")
+
+            HUTextField(
+                value = username,
+                label = "Choose a unique username",
+            )
+
+            HUTextFieldSpacer()
+            HUTextField(
+                value = email,
+                label = "Email",
+                keyboardType = KeyboardType.Email
+            )
+
+            HUTextFieldSpacer()
+            HUTextField(
+                value = password,
+                label = "Password",
+                keyboardType = KeyboardType.Password
+            )
+
+            HUTextFieldSpacer()
+            HUTextField(
+                value = confirmPassword,
+                label = "Confirm Password",
+                keyboardType = KeyboardType.Password
+            )
+
+            HUTextFieldSpacer()
+
+            // TODO: MAYBE REPLACE THIS WITH SHARED COMPONENT THIS LATER
             OutlinedButton(
                 onClick = { /* Handle signup */ },
                 modifier = Modifier
@@ -89,7 +96,6 @@ fun SignUpScreen(
                 shape = MaterialTheme.shapes.medium,
                 border = ButtonDefaults.outlinedButtonBorder.copy(
                     width = 3.dp,
-                    //color = CocoaBrown
                 ),
                 colors = ButtonDefaults.outlinedButtonColors(
                     containerColor = CocoaBrown.copy(alpha = 0.3f),
@@ -99,72 +105,14 @@ fun SignUpScreen(
                 Text(text = "Sign up", fontWeight = FontWeight.Bold)
             }
 
-            Spacer(modifier = Modifier.height(24.dp))
+            HUTextFieldSpacer(modifier = Modifier.weight(1f))
 
-            // Divider with text
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Divider(modifier = Modifier.weight(1f), color = CocoaBrown.copy(alpha = 0.3f))
-                Text(
-                    text = "Already have an account?",
-                    color = CocoaBrown,
-                    fontWeight = FontWeight.Medium,
-                    style = MaterialTheme.typography.bodySmall,
-                    modifier = Modifier.padding(horizontal = 8.dp)
-                )
-                Divider(modifier = Modifier.weight(1f), color = CocoaBrown.copy(alpha = 0.3f))
-            }
+            HUDividerWithText(text = "Already have an account?")
 
-            Spacer(modifier = Modifier.height(8.dp))
-
-            // Log in Button
-            OutlinedButton(
-                onClick = { navController.navigate(Routes.LOGIN) },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(48.dp),
-                shape = MaterialTheme.shapes.medium,
-                border = ButtonDefaults.outlinedButtonBorder.copy(
-                    width = 3.dp,
-                    //color = CocoaBrown
-                ),
-                colors = ButtonDefaults.outlinedButtonColors(
-                    containerColor = CocoaBrown.copy(alpha = 0.3f),
-                    contentColor = CocoaBrown
-                )
-            ) {
-                Text(text = "Log in", fontWeight = FontWeight.Bold)
-            }
+            HUTextButton(
+                label = "Login",
+                onClick = { navController.navigate(Routes.LOGIN) }
+            )
         }
     }
-}
-
-@Composable
-fun CustomTextField(
-    label: String,
-    value: String,
-    keyboardType: KeyboardType = KeyboardType.Text,
-    isPassword: Boolean = false,
-    onValueChange: (String) -> Unit
-) {
-    TextField(
-        value = value,
-        onValueChange = onValueChange,
-        label = { Text(label) },
-        singleLine = true,
-        keyboardOptions = KeyboardOptions(keyboardType = keyboardType),
-        visualTransformation = if (isPassword) PasswordVisualTransformation() else VisualTransformation.None,
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(vertical = 4.dp),
-        colors = TextFieldDefaults.colors(
-            focusedContainerColor = Color.White,
-            unfocusedContainerColor = Color.White,
-            focusedIndicatorColor = Color(0xFFADD8E6), // Light blue
-            unfocusedIndicatorColor = Color(0xFFADD8E6),
-            cursorColor = CocoaBrown
-        )
-    )
 }
