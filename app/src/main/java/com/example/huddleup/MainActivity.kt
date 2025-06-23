@@ -23,33 +23,23 @@ import com.example.huddleup.teamsearch.TeamSearchScreen
 import com.example.huddleup.ui.theme.HuddleUpTheme
 
 class MainActivity : ComponentActivity() {
-
-    private fun checkIfDisabledNavBarRoute(route: String): Boolean {
-        if (route == Routes.LOGIN) return false
-        if (route == Routes.SIGNUP) return false
-        return true // TODO: ADD LOGIC TO DISABLE THE NAVBAR FOR CERTAIN SCREENS
-    }
-
-    private fun isUserLoggedIn(): Boolean {
-        return false // TODO: CHECK IF USER IS LOGGED IN
-    }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
             HuddleUpTheme {
+                val startRoute = if (NavigationUtils.isUserLoggedIn()) Routes.DASHBOARD else Routes.LOGIN
                 val navController = rememberNavController()
-                val selectedScreenRoute = remember { mutableStateOf(if (isUserLoggedIn()) Routes.DASHBOARD else Routes.LOGIN) }
+                val selectedScreenRoute = remember { mutableStateOf(startRoute)}
 
                 Scaffold(bottomBar = {
-                    if (checkIfDisabledNavBarRoute(selectedScreenRoute.value)) {
+                    if (NavigationUtils.checkIfDisabledNavBarRoute(selectedScreenRoute.value)) {
                         BottomNavigationBar(selectedScreenRoute, navController)
                     }
                 }) { innerPadding ->
                     NavHost(
                         navController = navController,
-                        startDestination = if (isUserLoggedIn()) Routes.DASHBOARD else Routes.LOGIN,
+                        startDestination = startRoute,
                         modifier = Modifier
                             .fillMaxSize()
                             .padding(innerPadding)
