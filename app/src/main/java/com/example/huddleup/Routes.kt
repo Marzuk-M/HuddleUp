@@ -7,4 +7,5 @@ object Routes {
     const val SETTINGS = "settings"
     const val NOTIFICATION = "notification"
     const val TEAM_SEARCH = "search"
+    const val PROFILE = "search"
 }

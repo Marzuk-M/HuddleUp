@@ -81,6 +81,11 @@ class MainActivity : ComponentActivity() {
                                 navController
                             )
                         }
+                        composable(route = Routes.SETTINGS) {
+                            SettingsScreen(
+                                navController
+                            )
+                        }
                         // TODO: ADD OTHER COMPOSABLE ROUTES HERE
                     }
                 }
