@@ -19,6 +19,8 @@ import androidx.navigation.compose.rememberNavController
 import com.example.huddleup.auth.LoginScreen
 import com.example.huddleup.auth.SignUpScreen
 import com.example.huddleup.dashboard.DashboardScreen
+import com.example.huddleup.dashboard.ScheduleScreen
+import com.example.huddleup.dashboard.GroupChatScreen
 import com.example.huddleup.notifications.NotificationsScreen
 import com.example.huddleup.settings.SettingsScreen
 import com.example.huddleup.teamsearch.TeamSearchScreen
@@ -81,6 +83,8 @@ class MainActivity : ComponentActivity() {
                                 navController
                             )
                         }
+                        composable(route = Routes.SCHEDULE) { ScheduleScreen(navController) }
+                        composable(route = Routes.GROUP_CHAT) { GroupChatScreen(navController) }
                         // TODO: ADD OTHER COMPOSABLE ROUTES HERE
                     }
                 }
