@@ -19,6 +19,7 @@ import androidx.navigation.compose.rememberNavController
 import com.example.huddleup.auth.LoginScreen
 import com.example.huddleup.auth.SignUpScreen
 import com.example.huddleup.dashboard.DashboardScreen
+import com.example.huddleup.dashboard.GameDetailsScreen
 import com.example.huddleup.dashboard.ScheduleScreen
 import com.example.huddleup.dashboard.GroupChatScreen
 import com.example.huddleup.myleagues.MyLeaguesScreen
@@ -86,6 +87,11 @@ class MainActivity : ComponentActivity() {
                             )
                         }
                         composable(route = Routes.SCHEDULE) { ScheduleScreen(navController) }
+                        composable(route = Routes.GAME_DETAILS_WITH_ARG) { backStackEntry ->
+                            val gameId = backStackEntry.arguments?.getString("gameId")
+                            GameDetailsScreen(gameId)
+                        }
+
                         composable(route = Routes.GROUP_CHAT) { GroupChatScreen(navController) }
                         composable(route = Routes.MY_TEAMS) { MyTeamsScreen(navController) }
                         composable(route = Routes.MY_LEAGUES) { MyLeaguesScreen(navController) }
