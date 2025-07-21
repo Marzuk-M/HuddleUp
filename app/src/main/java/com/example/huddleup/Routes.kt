@@ -9,4 +9,6 @@ object Routes {
     const val TEAM_SEARCH = "search"
     const val SCHEDULE = "schedule"
     const val GROUP_CHAT = "group_chat"
+    const val MY_TEAMS = "my_teams"
+    const val MY_LEAGUES = "my_leagues"
 }
