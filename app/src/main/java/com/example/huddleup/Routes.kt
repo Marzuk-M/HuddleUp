@@ -7,11 +7,12 @@ object Routes {
     const val SETTINGS = "settings"
     const val NOTIFICATION = "notification"
     const val TEAM_SEARCH = "search"
+    const val PROFILE = "search"
+  
     const val SCHEDULE = "schedule"
     const val GROUP_CHAT = "group_chat"
     const val MY_TEAMS = "my_teams"
     const val MY_LEAGUES = "my_leagues"
     const val GAME_DETAILS = "game_details"
     const val GAME_DETAILS_WITH_ARG = "game_details/{gameId}"
-
 }
