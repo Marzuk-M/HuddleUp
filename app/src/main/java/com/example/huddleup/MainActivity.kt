@@ -38,7 +38,7 @@ class MainActivity : ComponentActivity() {
             val themeViewModel: ThemeViewModel = viewModel()
 
             HuddleUpTheme(themeViewModel = themeViewModel) {
-                val startRoute = if (NavigationUtils.isUserLoggedIn()) Routes.DASHBOARD else Routes.LOGIN
+                val startRoute = if (NavigationUtils.isUserLoggedIn()) Routes.DASHBOARD else Routes.DASHBOARD
                 val navController = rememberNavController()
                 val selectedScreenRoute = remember { mutableStateOf(startRoute)}
 
