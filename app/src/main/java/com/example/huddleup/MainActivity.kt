@@ -25,6 +25,7 @@ import com.example.huddleup.dashboard.GroupChatScreen
 import com.example.huddleup.myleagues.MyLeaguesScreen
 import com.example.huddleup.myteams.MyTeamsScreen
 import com.example.huddleup.notifications.NotificationsScreen
+import com.example.huddleup.settings.ProfileScreen
 import com.example.huddleup.settings.SettingsScreen
 import com.example.huddleup.teamsearch.TeamSearchScreen
 import com.example.huddleup.ui.theme.HuddleUpTheme
@@ -96,6 +97,7 @@ class MainActivity : ComponentActivity() {
                                 navController
                             )
                         }
+                        composable(route = Routes.PROFILE) { ProfileScreen(navController) }
 
                         composable(route = Routes.GROUP_CHAT) { GroupChatScreen(navController) }
                         composable(route = Routes.MY_TEAMS) { MyTeamsScreen(navController) }
