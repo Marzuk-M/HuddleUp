@@ -27,6 +27,7 @@ import com.example.huddleup.myteams.MyTeamsScreen
 import com.example.huddleup.notifications.NotificationsScreen
 import com.example.huddleup.settings.ProfileScreen
 import com.example.huddleup.settings.SettingsScreen
+import com.example.huddleup.myteams.TeamDetails
 import com.example.huddleup.teamsearch.TeamSearchScreen
 import com.example.huddleup.ui.theme.HuddleUpTheme
 import com.example.huddleup.ui.theme.ThemeViewModel
@@ -39,7 +40,7 @@ class MainActivity : ComponentActivity() {
             val themeViewModel: ThemeViewModel = viewModel()
 
             HuddleUpTheme(themeViewModel = themeViewModel) {
-                val startRoute = if (NavigationUtils.isUserLoggedIn()) Routes.DASHBOARD else Routes.DASHBOARD
+                val startRoute = if (NavigationUtils.isUserLoggedIn()) Routes.DASHBOARD else Routes.LOGIN
                 val navController = rememberNavController()
                 val selectedScreenRoute = remember { mutableStateOf(startRoute)}
 
@@ -94,6 +95,11 @@ class MainActivity : ComponentActivity() {
                         }
                         composable(route = Routes.SETTINGS) {
                             SettingsScreen(
+                                navController
+                            )
+                        }
+                        composable(route = Routes.TEAM_DETAILS) {
+                            TeamDetails(
                                 navController
                             )
                         }
