@@ -91,6 +91,11 @@ class MainActivity : ComponentActivity() {
                             val gameId = backStackEntry.arguments?.getString("gameId")
                             GameDetailsScreen(gameId)
                         }
+                        composable(route = Routes.SETTINGS) {
+                            SettingsScreen(
+                                navController
+                            )
+                        }
 
                         composable(route = Routes.GROUP_CHAT) { GroupChatScreen(navController) }
                         composable(route = Routes.MY_TEAMS) { MyTeamsScreen(navController) }

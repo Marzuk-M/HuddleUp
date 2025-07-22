@@ -3,53 +3,54 @@ package com.example.huddleup.notifications
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.BasicText
 import androidx.compose.material3.*
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
-import com.example.huddleup.sharedcomponents.PageHeader
 
 @Composable
 fun NotificationsScreen(
-    navController: NavController,
-    viewModel: NotificationsViewModel = viewModel()
+    navController: NavController
 ) {
-    val notificationsMap by viewModel.notifications.collectAsState()
-
-    Scaffold(
-        topBar = { PageHeader(title = "Notifications") }
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(Color(0xFFF6ECEC))
+            .padding(16.dp)
     ) {
-        Column(
-            modifier = Modifier
-                .padding(
-                    top = it.calculateTopPadding(),
-                    start = 16.dp,
-                    end = 16.dp,
-                    bottom = 16.dp
-                )
-                .fillMaxSize()
-                .background(Color(0xFFF6ECEC))
+        // Header
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.Center,
+            verticalAlignment = Alignment.CenterVertically
         ) {
-            Spacer(modifier = Modifier.height(16.dp))
-
-            if (notificationsMap.isEmpty()) {
-                Text("Loading...", color = Color.Gray)
-            } else {
-                notificationsMap.forEach { (section, notifications) ->
-                    SectionHeader(title = section)
-                    notifications.forEach { notification ->
-                        NotificationItem(notification.message)
-                    }
-                    Spacer(modifier = Modifier.height(16.dp))
-                }
-            }
+            Text(
+                text = "Notifications 🔔",
+                fontSize = 36.sp,
+                fontWeight = FontWeight.SemiBold,
+                color = Color.Black
+            )
         }
+
+        Spacer(modifier = Modifier.height(16.dp))
+
+        // New Section
+        SectionHeader(title = "New")
+        NotificationItem("Test notification. hello how are you?")
+        NotificationItem("Test notification. hello")
+
+        Spacer(modifier = Modifier.height(16.dp))
+
+        // Yesterday Section
+        SectionHeader(title = "Yesterday")
+        NotificationItem("Test notification. hello")
+        NotificationItem("Test notification. hello")
     }
 }
 
