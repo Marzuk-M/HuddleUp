@@ -9,8 +9,7 @@ object Routes {
     const val NOTIFICATION = "notification"
 
     const val TEAM_SEARCH = "search"
-
-    const val PROFILE = "search"
+    const val PROFILE = "profile"
   
     const val SCHEDULE = "schedule"
 
