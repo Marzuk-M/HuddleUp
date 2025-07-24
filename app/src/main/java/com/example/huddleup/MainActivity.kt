@@ -18,6 +18,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.huddleup.auth.LoginScreen
 import com.example.huddleup.auth.SignUpScreen
+import com.example.huddleup.chat.ChatInboxScreen
 import com.example.huddleup.dashboard.DashboardScreen
 import com.example.huddleup.dashboard.GameDetailsScreen
 import com.example.huddleup.dashboard.ScheduleScreen
@@ -93,8 +94,8 @@ class MainActivity : ComponentActivity() {
                         }
 
                         composable(route = Routes.GROUP_CHAT) { GroupChatScreen(navController) }
+                        composable(route = Routes.CHAT_INBOX) { ChatInboxScreen(navController) }
                         composable(route = Routes.MY_TEAMS) { MyTeamsScreen(navController) }
-                        composable(route = Routes.MY_LEAGUES) { MyLeaguesScreen(navController) }
                         // TODO: ADD OTHER COMPOSABLE ROUTES HERE
                     }
                 }
