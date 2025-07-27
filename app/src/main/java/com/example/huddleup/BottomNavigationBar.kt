@@ -2,12 +2,11 @@ package com.example.huddleup
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.CalendarToday
+import androidx.compose.material.icons.filled.ChatBubble
 import androidx.compose.material.icons.filled.Groups
 import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.Settings
-import androidx.compose.material.icons.filled.Sports
-import androidx.compose.material.icons.filled.SportsTennis
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
@@ -34,7 +33,7 @@ fun BottomNavigationBar (
             route = Routes.TEAM_SEARCH
         ),
         NavItem(
-            label = "Dashboard",
+            label = "My Calendar",
             icon = Icons.Default.CalendarToday,
             route = Routes.DASHBOARD
         ),
@@ -44,9 +43,9 @@ fun BottomNavigationBar (
             route = Routes.MY_TEAMS
         ),
         NavItem(
-            label = "My Leagues",
-            icon = Icons.Default.SportsTennis,
-            route = Routes.MY_LEAGUES
+            label = "Chat Inbox",
+            icon = Icons.Default.ChatBubble,
+            route = Routes.CHAT_INBOX
         ),
         NavItem(
             label = "Notifications",

@@ -1,40 +1,123 @@
 package com.example.huddleup.dashboard
 
-import androidx.compose.foundation.clickable
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material.icons.filled.ArrowForward
-import androidx.compose.material.icons.filled.SportsSoccer
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.google.firebase.auth.FirebaseAuth
 import java.time.LocalDate
+
+val gameAvailability = mutableStateMapOf<Int, MutableMap<String, String>>() // gameId -> (email -> status)
+
 @Composable
-fun GameDetailsScreen(gameId: String?) {
+fun GameDetailsScreen(navController: NavController, gameId: String?) {
     val game = allGames.find { it.id.toString() == gameId }
+    val currentUser = FirebaseAuth.getInstance().currentUser
+    val userEmail = currentUser?.email ?: "unknown@email.com"
 
     Column(
         modifier = Modifier
             .fillMaxSize()
             .padding(24.dp),
-        verticalArrangement = Arrangement.Center,
+        verticalArrangement = Arrangement.Top,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         if (game != null) {
             Text("Game Details", style = MaterialTheme.typography.headlineMedium)
             Spacer(modifier = Modifier.height(16.dp))
-            Text("Teams: ${game.team1} vs ${game.team2}")
-            Text("Date: ${game.date}")
-            Text("Time: ${game.time}")
+
+            // Game Info Box
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .border(1.dp, MaterialTheme.colorScheme.primary, RoundedCornerShape(8.dp))
+                    .padding(16.dp)
+            ) {
+                Text("Teams:", style = MaterialTheme.typography.labelLarge, color = MaterialTheme.colorScheme.primary)
+                Text("${game.team1} vs ${game.team2}", style = MaterialTheme.typography.bodyLarge)
+                Spacer(modifier = Modifier.height(8.dp))
+                Text("Date:", style = MaterialTheme.typography.labelLarge, color = MaterialTheme.colorScheme.primary)
+                Text("${game.date}", style = MaterialTheme.typography.bodyLarge)
+                Spacer(modifier = Modifier.height(8.dp))
+                Text("Time:", style = MaterialTheme.typography.labelLarge, color = MaterialTheme.colorScheme.primary)
+                Text("${game.time}", style = MaterialTheme.typography.bodyLarge)
+                Spacer(modifier = Modifier.height(8.dp))
+                Text("Place:", style = MaterialTheme.typography.labelLarge, color = MaterialTheme.colorScheme.primary)
+                Text("${game.place}", style = MaterialTheme.typography.bodyLarge)
+            }
+
+            Spacer(modifier = Modifier.height(24.dp))
+
+            val availability = remember { gameAvailability.getOrPut(game.id) { mutableStateMapOf() } }
+            val userStatus = availability[userEmail] ?: "none"
+            val inUsers = availability.filter { it.value == "in" }.keys
+            val outUsers = availability.filter { it.value == "out" }.keys
+
+            Text("Availability: ${inUsers.size} In / ${outUsers.size} Out", style = MaterialTheme.typography.titleMedium)
+            Spacer(modifier = Modifier.height(12.dp))
+
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceEvenly
+            ) {
+                Button(
+                    onClick = { availability[userEmail] = "in" },
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = if (userStatus == "in") MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.secondary
+                    )
+                ) {
+                    Text("I'm In")
+                }
+
+                Button(
+                    onClick = { availability[userEmail] = "out" },
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = if (userStatus == "out") MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.secondary
+                    )
+                ) {
+                    Text("I'm Out")
+                }
+            }
+
+            Spacer(modifier = Modifier.height(12.dp))
+            Text(
+                "Your Status: ${userStatus.uppercase()}",
+                style = MaterialTheme.typography.titleMedium,
+                color = if (userStatus == "in") Color(0xFF2E7D32) else if (userStatus == "out") Color(0xFFC62828) else MaterialTheme.colorScheme.primary
+            )
+            Spacer(modifier = Modifier.height(24.dp))
+
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceEvenly
+            ) {
+                Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                    Text("IN", style = MaterialTheme.typography.titleSmall)
+                    inUsers.forEach { Text(it) }
+                }
+
+                Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                    Text("OUT", style = MaterialTheme.typography.titleSmall)
+                    outUsers.forEach { Text(it) }
+                }
+            }
+
+            Spacer(modifier = Modifier.weight(1f))
+            Button(
+                onClick = { navController.navigate(com.example.huddleup.Routes.SCHEDULE) },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(bottom = 4.dp)
+            ) {
+                Text("Back to Schedule")
+            }
         } else {
             Text("Game not found", color = MaterialTheme.colorScheme.error)
         }
