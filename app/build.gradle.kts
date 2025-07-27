@@ -63,6 +63,12 @@ dependencies {
     implementation(platform(libs.firebase.bom))
     implementation(libs.firebase.analytics)
 
+    // Ktor Client
+    implementation(libs.ktor.core)
+    implementation(libs.ktor.cio)
+    implementation(libs.ktor.serialization.kotlinx.json)
+    implementation(libs.ktor.client.content.negotiation)
+
     implementation(libs.navigation.compose)
     implementation(libs.material.icons.extended)
 }
