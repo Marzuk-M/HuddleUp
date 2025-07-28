@@ -29,11 +29,17 @@ import com.example.huddleup.sharedcomponents.PageHeader
 import androidx.navigation.NavController
 import com.example.huddleup.ui.theme.Cream
 import com.example.huddleup.ui.theme.RoseQuartz
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 
 @Composable
 fun DashboardScreen(
-    navController: NavController
+    navController: NavController,
 ) {
+    val nextGame: Game? = allGames
+        .filter { it.date >= LocalDate.now() }
+        .minByOrNull { it.date }
+
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -44,17 +50,40 @@ fun DashboardScreen(
         Spacer(modifier = Modifier.height(8.dp))
         // Next Game Card
         Card(
+            onClick = {
+                nextGame?.let {
+                    navController.navigate("game_details/${nextGame.id}")
+                }
+            },
             shape = RoundedCornerShape(20.dp),
             colors = CardDefaults.cardColors(containerColor = RoseQuartz),
-            modifier = Modifier.fillMaxWidth()
-        ) {
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 16.dp, vertical = 8.dp)
+        )
+        {
             Column(modifier = Modifier.padding(20.dp)) {
-                Text("NEXT GAME", style = MaterialTheme.typography.labelLarge.copy(color = Color.Gray))
+                Text(
+                    "NEXT GAME",
+                    style = MaterialTheme.typography.labelLarge.copy(color = Color.Gray)
+                )
                 Spacer(modifier = Modifier.height(8.dp))
-                Text("April 25", style = MaterialTheme.typography.headlineSmall.copy(fontWeight = FontWeight.Bold))
-                Text("6:00 PM", style = MaterialTheme.typography.headlineSmall.copy(fontWeight = FontWeight.Bold))
-                Spacer(modifier = Modifier.height(4.dp))
-                Text("vs Wildcats", style = MaterialTheme.typography.bodyLarge)
+                if (nextGame != null) {
+
+                    Text(
+                        text = "${nextGame.date.format(DateTimeFormatter.ofPattern("MMM dd"))}",
+                        style = MaterialTheme.typography.headlineSmall.copy(fontWeight = FontWeight.Bold)
+                    )
+                    Text(
+                        text = nextGame.time,
+                        style = MaterialTheme.typography.headlineSmall.copy(fontWeight = FontWeight.Bold)
+                    )
+                    Spacer(modifier = Modifier.height(4.dp))
+                    Text(text = "vs ${nextGame.team2}", style = MaterialTheme.typography.bodyLarge)
+                } else {
+                    Text("No upcoming games", style = MaterialTheme.typography.bodyLarge)
+                }
+
             }
         }
         Spacer(modifier = Modifier.height(16.dp))
@@ -64,11 +93,7 @@ fun DashboardScreen(
             subtitle = "View upcoming games",
             onClick = { navController.navigate(com.example.huddleup.Routes.SCHEDULE) }
         )
-        DashboardNavItem(
-            title = "Availability",
-            subtitle = "Update your status",
-            onClick = { /* TODO: Add navigation */ }
-        )
+
         DashboardNavItem(
             title = "Chat",
             subtitle = "Team messaging",

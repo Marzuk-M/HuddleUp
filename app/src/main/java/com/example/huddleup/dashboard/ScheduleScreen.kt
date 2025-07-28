@@ -25,13 +25,15 @@ data class Game(
     val team1: String,
     val team2: String,
     val date: LocalDate,
-    val time: String
+    val time: String,
+    val place: String
 )
 val allGames = listOf(
-    Game(1, "Demo FC", "Test United", LocalDate.of(2025, 7, 12), "7:30 PM"),
-    Game(2, "Red Wolves", "Blue Sharks", LocalDate.of(2025, 7, 19), "6:00 PM"),
-    Game(3, "Lions", "Bears", LocalDate.of(2025, 7, 30), "8:45 PM"),
+    Game(1, "Demo FC", "Test United", LocalDate.of(2025, 7, 12), "7:30 PM", "Paramount Fine Foods Centre"),
+    Game(2, "Red Wolves", "Blue Sharks", LocalDate.of(2025, 7, 19), "6:00 PM", "Iceland Arena"),
+    Game(3, "Lions", "Bears", LocalDate.of(2025, 7, 30), "8:45 PM", "Clarkson Arena")
 )
+
 
 @Composable
 fun ScheduleScreen(navController: NavController) {
@@ -40,16 +42,8 @@ fun ScheduleScreen(navController: NavController) {
 
     val gamesForSelectedDate = allGames.filter { it.date == selectedDate }
 
-
-
-
     Column(modifier = Modifier.fillMaxSize().padding(16.dp)) {
-        Button(
-            onClick = { navController.navigate("dashboard") },
-            modifier = Modifier.fillMaxWidth().padding(bottom = 8.dp)
-        ) {
-            Text("Back to Dashboard")
-        }
+        // <-- Removed the Back to Dashboard Button here
 
         Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
             IconButton(onClick = { currentMonth = currentMonth.minusMonths(1) }) {
@@ -85,9 +79,6 @@ fun ScheduleScreen(navController: NavController) {
                         .padding(vertical = 4.dp)
                         .clickable {
                             navController.navigate("game_details/${game.id}")
-
-
-
                         }
                 ) {
                     Column(modifier = Modifier.padding(16.dp)) {

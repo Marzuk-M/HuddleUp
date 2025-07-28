@@ -62,10 +62,10 @@ class MainActivity : ComponentActivity() {
                 Scaffold(
                     containerColor = MaterialTheme.colorScheme.background,
                     bottomBar = {
-                    if (NavigationUtils.checkIfDisabledNavBarRoute(selectedScreenRoute.value)) {
-                        BottomNavigationBar(selectedScreenRoute, navController)
-                    }
-                }) { innerPadding ->
+                        if (NavigationUtils.checkIfDisabledNavBarRoute(selectedScreenRoute.value)) {
+                            BottomNavigationBar(selectedScreenRoute, navController)
+                        }
+                    }) { innerPadding ->
                     NavHost(
                         navController = navController,
                         startDestination = startRoute,
@@ -83,7 +83,7 @@ class MainActivity : ComponentActivity() {
                         composable(route = Routes.SCHEDULE) { ScheduleScreen(navController) }
                         composable(route = Routes.GAME_DETAILS_WITH_ARG) { backStackEntry ->
                             val gameId = backStackEntry.arguments?.getString("gameId")
-                            GameDetailsScreen(gameId)
+                            GameDetailsScreen(navController,gameId)
                         }
                         composable(route = Routes.SETTINGS) { SettingsScreen(navController) }
                         composable(route = Routes.TEAM_DETAILS) { TeamDetails(navController) }
