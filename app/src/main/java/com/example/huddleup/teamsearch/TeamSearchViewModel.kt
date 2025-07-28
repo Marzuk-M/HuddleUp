@@ -19,44 +19,58 @@ class TeamSearchViewModel : ViewModel() {
     val isLoading: StateFlow<Boolean> = _isLoading.asStateFlow()
 
     fun searchTeams(searchQuery: String) {
-        if (searchQuery.isEmpty()) {
-            viewModelScope.launch {
-                _searchResults.value = listOf()
-                _isLoading.value = false
+        viewModelScope.launch {
+            _isLoading.value = true
+            android.util.Log.d("TeamSearchViewModel", "Searching teams with query: '$searchQuery'")
+            
+            if (searchQuery.isEmpty()) {
+                // Show all teams when search is empty
+                val results = teamSearchService.searchTeams("")
+                android.util.Log.d("TeamSearchViewModel", "Empty query results: ${results.size} teams")
+                _searchResults.value = results
+            } else {
+                // Filter teams based on search query
+                val results = teamSearchService.searchTeams(searchQuery = searchQuery)
+                android.util.Log.d("TeamSearchViewModel", "Query '$searchQuery' results: ${results.size} teams")
+                _searchResults.value = results
             }
-        } else {
-            viewModelScope.launch {
-                _isLoading.value = true
-                _searchResults.value = teamSearchService.searchTeams(searchQuery = searchQuery)
-                _isLoading.value = false
-            }
+            _isLoading.value = false
         }
     }
 
     private fun refreshTeamsList(searchQuery: String) {
         viewModelScope.launch {
+            // Always refresh, regardless of search query
             _searchResults.value = teamSearchService.searchTeams(searchQuery)
         }
     }
 
     fun sendJoinRequest(teamID: String, searchQuery: String) {
         viewModelScope.launch {
-            teamSearchService.sendJoinRequest(teamID)
-            refreshTeamsList(searchQuery)
+            val success = teamSearchService.sendJoinRequest(teamID)
+            if (success) {
+                refreshTeamsList(searchQuery)
+            }
         }
     }
 
+    // Note: unsendJoinRequest is no longer needed since users join instantly
+    // Keeping this for backward compatibility but it won't be used
     fun unsendJoinRequest(teamID: String, searchQuery: String) {
         viewModelScope.launch {
-            teamSearchService.unsendJoinRequest(teamID)
-            refreshTeamsList(searchQuery)
+            val success = teamSearchService.unsendJoinRequest(teamID)
+            if (success) {
+                refreshTeamsList(searchQuery)
+            }
         }
     }
 
     fun leaveTeam(teamID: String, searchQuery: String) {
         viewModelScope.launch {
-            teamSearchService.leaveTeam(teamID)
-            refreshTeamsList(searchQuery)
+            val success = teamSearchService.leaveTeam(teamID)
+            if (success) {
+                refreshTeamsList(searchQuery)
+            }
         }
     }
 }

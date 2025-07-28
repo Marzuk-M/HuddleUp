@@ -1,6 +1,5 @@
 package com.example.huddleup.dashboard
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -11,14 +10,19 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.google.firebase.auth.FirebaseAuth
-import java.time.LocalDate
 
 val gameAvailability = mutableStateMapOf<Int, MutableMap<String, String>>() // gameId -> (email -> status)
 
 @Composable
-fun GameDetailsScreen(navController: NavController, gameId: String?) {
-    val game = allGames.find { it.id.toString() == gameId }
+fun GameDetailsScreen(
+    navController: NavController, 
+    gameId: String?,
+    viewModel: ScheduleViewModel = viewModel()
+) {
+    val games by viewModel.games.collectAsState()
+    val game = games.find { it.originalId == gameId }
     val currentUser = FirebaseAuth.getInstance().currentUser
     val userEmail = currentUser?.email ?: "unknown@email.com"
 
@@ -68,7 +72,10 @@ fun GameDetailsScreen(navController: NavController, gameId: String?) {
                 horizontalArrangement = Arrangement.SpaceEvenly
             ) {
                 Button(
-                    onClick = { availability[userEmail] = "in" },
+                    onClick = { 
+                        availability[userEmail] = "in"
+                        gameId?.let { viewModel.updateGameAvailability(it, "in", userEmail) }
+                    },
                     colors = ButtonDefaults.buttonColors(
                         containerColor = if (userStatus == "in") MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.secondary
                     )
@@ -77,7 +84,10 @@ fun GameDetailsScreen(navController: NavController, gameId: String?) {
                 }
 
                 Button(
-                    onClick = { availability[userEmail] = "out" },
+                    onClick = { 
+                        availability[userEmail] = "out"
+                        gameId?.let { viewModel.updateGameAvailability(it, "out", userEmail) }
+                    },
                     colors = ButtonDefaults.buttonColors(
                         containerColor = if (userStatus == "out") MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.secondary
                     )
@@ -110,14 +120,6 @@ fun GameDetailsScreen(navController: NavController, gameId: String?) {
             }
 
             Spacer(modifier = Modifier.weight(1f))
-            Button(
-                onClick = { navController.navigate(com.example.huddleup.Routes.SCHEDULE) },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(bottom = 4.dp)
-            ) {
-                Text("Back to Schedule")
-            }
         } else {
             Text("Game not found", color = MaterialTheme.colorScheme.error)
         }

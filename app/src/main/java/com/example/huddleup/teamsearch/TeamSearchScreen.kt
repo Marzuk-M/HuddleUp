@@ -5,6 +5,8 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -49,6 +51,12 @@ fun TeamSearchScreen(
     val searchResults by viewModel.searchResults.collectAsState()
     val isLoading by viewModel.isLoading.collectAsState()
 
+    // Trigger initial search when screen loads
+    LaunchedEffect(Unit) {
+        viewModel.searchTeams("")
+    }
+    
+    // Search when query changes
     LaunchedEffect(searchQuery) {
         viewModel.searchTeams(searchQuery)
     }
@@ -58,8 +66,19 @@ fun TeamSearchScreen(
             SearchBar(
                 searchQuery = searchQuery,
                 onSearchQueryChange = { searchQuery = it },
-                placeholder = "Search for a team..."
+                placeholder = "Search by team name or ID..."
             )
+        },
+        floatingActionButton = {
+            FloatingActionButton(
+                onClick = { navController.navigate("new_team") },
+                modifier = Modifier.padding(bottom = 2.dp)
+            ) {
+                Icon(
+                    imageVector = Icons.Default.Add,
+                    contentDescription = "Create New Team"
+                )
+            }
         }
     ) {
         Column(
@@ -71,7 +90,7 @@ fun TeamSearchScreen(
                 }
             } else if (searchResults.isEmpty()) {
                 Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                    Text(text = "Search for a team using the searchbar...")
+                    Text(text = if (searchQuery.isEmpty()) "No teams found" else "No teams match your search")
                 }
             } else {
                 LazyColumn(
@@ -82,7 +101,7 @@ fun TeamSearchScreen(
                     items(searchResults) { team ->
                         TeamListItem(
                             team = team,
-                            onNavigate = { /* TODO: navController.navigate("details/${team.id}") */ },
+                            onNavigate = { navController.navigate("team_details/${team.id}") },
                             onJoin = { viewModel.sendJoinRequest(team.id, searchQuery) },
                             onLeave = { viewModel.leaveTeam(team.id, searchQuery) },
                             onCancelRequest = { viewModel.unsendJoinRequest(team.id, searchQuery) }
@@ -117,17 +136,15 @@ fun TeamListItem(
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
             Column {
-                Row (verticalAlignment = Alignment.CenterVertically) {
-                    Text(
-                        text = team.name,
-                        style = TextStyle(fontWeight = FontWeight.Bold, fontSize = 16.sp)
-                    )
-                    Spacer(modifier = Modifier.padding(2.dp))
-                    Text(
-                        text = "#${team.id}",
-                        style = TextStyle(fontSize = 12.sp, color = Color.Gray)
-                    )
-                }
+                Text(
+                    text = team.name,
+                    style = TextStyle(fontWeight = FontWeight.Bold, fontSize = 16.sp)
+                )
+                Spacer(modifier = Modifier.padding(4.dp))
+                Text(
+                    text = "#${team.id}",
+                    style = TextStyle(fontSize = 12.sp, color = Color.Gray)
+                )
                 Spacer(modifier = Modifier.height(4.dp))
                 Text(
                     text = "${team.members} members",

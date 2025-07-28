@@ -10,6 +10,7 @@ import androidx.compose.material.icons.filled.ArrowForward
 import androidx.compose.material.icons.filled.SportsSoccer
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -17,81 +18,8 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import androidx.lifecycle.viewmodel.compose.viewModel
 import java.time.LocalDate
-
-// Game model with time
-data class Game(
-    val id: Int,
-    val team1: String,
-    val team2: String,
-    val date: LocalDate,
-    val time: String,
-    val place: String
-)
-val allGames = listOf(
-    Game(1, "Demo FC", "Test United", LocalDate.of(2025, 7, 12), "7:30 PM", "Paramount Fine Foods Centre"),
-    Game(2, "Red Wolves", "Blue Sharks", LocalDate.of(2025, 7, 19), "6:00 PM", "Iceland Arena"),
-    Game(3, "Lions", "Bears", LocalDate.of(2025, 7, 30), "8:45 PM", "Clarkson Arena")
-)
-
-
-@Composable
-fun ScheduleScreen(navController: NavController) {
-    var selectedDate by remember { mutableStateOf(LocalDate.of(2025, 7, 24)) }
-    var currentMonth by remember { mutableStateOf(selectedDate.withDayOfMonth(1)) }
-
-    val gamesForSelectedDate = allGames.filter { it.date == selectedDate }
-
-    Column(modifier = Modifier.fillMaxSize().padding(16.dp)) {
-        // <-- Removed the Back to Dashboard Button here
-
-        Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
-            IconButton(onClick = { currentMonth = currentMonth.minusMonths(1) }) {
-                Icon(Icons.Default.ArrowBack, contentDescription = "Previous Month")
-            }
-            Text(
-                text = "${currentMonth.month.name} ${currentMonth.year}",
-                style = MaterialTheme.typography.titleLarge,
-                modifier = Modifier.align(Alignment.CenterVertically)
-            )
-            IconButton(onClick = { currentMonth = currentMonth.plusMonths(1) }) {
-                Icon(Icons.Default.ArrowForward, contentDescription = "Next Month")
-            }
-        }
-
-        Spacer(modifier = Modifier.height(8.dp))
-
-        CalendarView(
-            selectedDate = selectedDate,
-            monthToDisplay = currentMonth,
-            gameDates = allGames.map { it.date },
-            onDateSelected = { selectedDate = it }
-        )
-
-        Spacer(modifier = Modifier.height(12.dp))
-        Text("Games on $selectedDate", style = MaterialTheme.typography.titleMedium)
-
-        LazyColumn {
-            items(gamesForSelectedDate) { game ->
-                Card(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(vertical = 4.dp)
-                        .clickable {
-                            navController.navigate("game_details/${game.id}")
-                        }
-                ) {
-                    Column(modifier = Modifier.padding(16.dp)) {
-                        Text("${game.team1} vs ${game.team2}")
-                        Text("Date: ${game.date}")
-                        Text("Time: ${game.time}")
-                    }
-                }
-            }
-        }
-    }
-}
-
 
 @Composable
 fun CalendarView(
@@ -173,6 +101,80 @@ fun CalendarView(
                         }
                         repeat(7 - week.size) {
                             Spacer(modifier = Modifier.weight(1f))
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+
+@Composable
+fun ScheduleScreen(
+    navController: NavController,
+    viewModel: ScheduleViewModel = viewModel()
+) {
+    val games by viewModel.games.collectAsState()
+    val isLoading by viewModel.isLoading.collectAsState()
+    val selectedDate by viewModel.selectedDate.collectAsState()
+    
+    var currentMonth by remember { mutableStateOf(selectedDate.withDayOfMonth(1)) }
+
+    val gamesForSelectedDate = games.filter { it.date == selectedDate }
+
+    Column(modifier = Modifier.fillMaxSize().padding(16.dp)) {
+        // <-- Removed the Back to Dashboard Button here
+
+        Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
+            IconButton(onClick = { currentMonth = currentMonth.minusMonths(1) }) {
+                Icon(Icons.Default.ArrowBack, contentDescription = "Previous Month")
+            }
+            Text(
+                text = "${currentMonth.month.name} ${currentMonth.year}",
+                style = MaterialTheme.typography.titleLarge,
+                modifier = Modifier.align(Alignment.CenterVertically)
+            )
+            IconButton(onClick = { currentMonth = currentMonth.plusMonths(1) }) {
+                Icon(Icons.Default.ArrowForward, contentDescription = "Next Month")
+            }
+        }
+
+        Spacer(modifier = Modifier.height(8.dp))
+
+        CalendarView(
+            selectedDate = selectedDate,
+            monthToDisplay = currentMonth,
+            gameDates = games.map { it.date },
+            onDateSelected = { viewModel.setSelectedDate(it) }
+        )
+
+        Spacer(modifier = Modifier.height(12.dp))
+        Text("Games on $selectedDate", style = MaterialTheme.typography.titleMedium)
+
+        if (isLoading) {
+            Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                CircularProgressIndicator()
+            }
+        } else if (gamesForSelectedDate.isEmpty()) {
+            Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                Text("No games scheduled for this date")
+            }
+        } else {
+            LazyColumn {
+                items(gamesForSelectedDate) { game ->
+                    Card(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(vertical = 4.dp)
+                                                    .clickable {
+                            navController.navigate("game_details/${game.originalId}")
+                        }
+                    ) {
+                        Column(modifier = Modifier.padding(16.dp)) {
+                            Text("${game.team1} vs ${game.team2}")
+                            Text("Date: ${game.date}")
+                            Text("Time: ${game.time}")
                         }
                     }
                 }
