@@ -46,7 +46,6 @@ fun TeamSearchScreen(
     viewModel: TeamSearchViewModel = viewModel()
 ) {
     var searchQuery by remember { mutableStateOf("") }
-
     val searchResults by viewModel.searchResults.collectAsState()
     val isLoading by viewModel.isLoading.collectAsState()
 

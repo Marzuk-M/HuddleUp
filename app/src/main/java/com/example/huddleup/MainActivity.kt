@@ -79,31 +79,15 @@ class MainActivity : ComponentActivity() {
                         composable(route = Routes.SIGNUP) { SignUpScreen(navController) }
                         composable(route = Routes.DASHBOARD) { DashboardScreen(navController) }
                         composable(route = Routes.SETTINGS) { SettingsScreen(navController) }
-                        composable(route = Routes.NOTIFICATION) {
-                            NotificationsScreen(
-                                navController
-                            )
-                        }
-                        composable(route = Routes.TEAM_SEARCH) {
-                            TeamSearchScreen(
-                                navController
-                            )
-                        }
+                        composable(route = Routes.NOTIFICATION) { NotificationsScreen(navController) }
+                        composable(route = Routes.TEAM_SEARCH) { TeamSearchScreen(navController) }
                         composable(route = Routes.SCHEDULE) { ScheduleScreen(navController) }
                         composable(route = Routes.GAME_DETAILS_WITH_ARG) { backStackEntry ->
                             val gameId = backStackEntry.arguments?.getString("gameId")
                             GameDetailsScreen(gameId)
                         }
-                        composable(route = Routes.SETTINGS) {
-                            SettingsScreen(
-                                navController
-                            )
-                        }
-                        composable(route = Routes.TEAM_DETAILS) {
-                            TeamDetails(
-                                navController
-                            )
-                        }
+                        composable(route = Routes.SETTINGS) { SettingsScreen(navController) }
+                        composable(route = Routes.TEAM_DETAILS) { TeamDetails(navController) }
                         composable(route = Routes.PROFILE) { ProfileScreen(navController) }
 
                         composable(route = Routes.GROUP_CHAT) { GroupChatScreen(navController) }

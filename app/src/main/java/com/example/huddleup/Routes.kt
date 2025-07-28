@@ -19,5 +19,4 @@ object Routes {
     const val GAME_DETAILS = "game_details"
     const val GAME_DETAILS_WITH_ARG = "game_details/{gameId}"
     const val TEAM_DETAILS = "details"
-
 }
