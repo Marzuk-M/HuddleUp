@@ -6,21 +6,6 @@ import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.request.delete
 import io.ktor.client.request.get
-import kotlinx.serialization.Serializable
-
-@Serializable
-data class TeamResponse(
-    val id: String,
-    val name: String,
-    val members: Int,
-    val membershipState: String
-)
-
-@Serializable
-data class ApiResponse(
-    val message: String? = null,
-    val error: String? = null
-)
 
 class MyTeamsService(private val client: HttpClient) {
 

@@ -2,43 +2,15 @@ package com.example.huddleup.teamsearch
 
 import android.util.Log
 import com.example.huddleup.Endpoints
-import com.example.huddleup.auth.AuthService
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.request.delete
 import io.ktor.client.request.get
 import io.ktor.client.request.post
-import io.ktor.client.request.setBody
 import io.ktor.http.ContentType
 import io.ktor.http.contentType
-import io.ktor.http.parameters
-import io.ktor.http.headers
-import kotlinx.serialization.Serializable
-
-@Serializable
-data class TeamResponse(
-    val id: String,
-    val name: String,
-    val members: Int,
-    val membershipState: String
-)
-
-@Serializable
-data class ApiResponse(
-    val message: String? = null,
-    val error: String? = null
-)
 
 class TeamSearchService(private val client: HttpClient) {
-
-    private suspend fun getAuthHeaders(): Map<String, String> {
-        val token = AuthService.getFirebaseAuthToken()
-        return if (token != null) {
-            mapOf("Authorization" to "Bearer $token")
-        } else {
-            emptyMap()
-        }
-    }
 
     suspend fun searchTeams(searchQuery: String): List<Team> {
         Log.d("Service", "searchTeams: $searchQuery")

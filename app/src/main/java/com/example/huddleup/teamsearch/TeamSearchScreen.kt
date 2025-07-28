@@ -56,9 +56,7 @@ fun TeamSearchScreen(
     
     // Search when query changes
     LaunchedEffect(searchQuery) {
-        if (searchQuery.isNotEmpty()) {
-            viewModel.searchTeams(searchQuery)
-        }
+        viewModel.searchTeams(searchQuery)
     }
 
     Scaffold (
@@ -125,17 +123,15 @@ fun TeamListItem(
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
             Column {
-                Row (verticalAlignment = Alignment.CenterVertically) {
-                    Text(
-                        text = team.name,
-                        style = TextStyle(fontWeight = FontWeight.Bold, fontSize = 16.sp)
-                    )
-                    Spacer(modifier = Modifier.padding(2.dp))
-                    Text(
-                        text = "#${team.id}",
-                        style = TextStyle(fontSize = 12.sp, color = Color.Gray)
-                    )
-                }
+                Text(
+                    text = team.name,
+                    style = TextStyle(fontWeight = FontWeight.Bold, fontSize = 16.sp)
+                )
+                Spacer(modifier = Modifier.padding(4.dp))
+                Text(
+                    text = "#${team.id}",
+                    style = TextStyle(fontSize = 12.sp, color = Color.Gray)
+                )
                 Spacer(modifier = Modifier.height(4.dp))
                 Text(
                     text = "${team.members} members",

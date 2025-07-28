@@ -1,5 +1,7 @@
 package com.example.huddleup.teamsearch
 
+import kotlinx.serialization.Serializable
+
 // Data class to represent a team
 data class Team(
     val id: String,
@@ -14,3 +16,17 @@ enum class TeamMembershipState {
     REQUESTED,     // User has requested to join (legacy - no longer used)
     NOT_A_MEMBER   // User is not a member
 }
+
+@Serializable
+data class TeamResponse(
+    val id: String,
+    val name: String,
+    val members: Int,
+    val membershipState: String
+)
+
+@Serializable
+data class ApiResponse(
+    val message: String? = null,
+    val error: String? = null
+)
