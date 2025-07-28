@@ -6,4 +6,9 @@ object Endpoints {
     // Auth Endpoints
     fun getSignupEndpoint() = "$BASE_URL/api/auth/signup"
     fun checkUsernameEndpoint(username: String) = "$BASE_URL/api/auth/username/$username"
+    
+    // Notifications Endpoints
+    fun getNotificationsEndpoint() = "$BASE_URL/api/notifications"
+    fun markNotificationAsReadEndpoint(notificationId: String) = "$BASE_URL/api/notifications/$notificationId/read"
+    fun createNotificationEndpoint() = "$BASE_URL/api/notifications"
 }
