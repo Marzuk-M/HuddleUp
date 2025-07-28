@@ -5,6 +5,8 @@ const router = express.Router();
 const authController = require('./controllers/auth.controller');
 const dashboardController = require('./controllers/dashboard.controller');
 const teamController = require('./controllers/team.controller');
+
+const notificationsController = require('./controllers/notifications.controller');
 const authenticateToken = require('./middlewares/auth.middleware');
 
 // Auth Routes
@@ -31,5 +33,11 @@ router.get('/teams/my-teams/test', teamController.getUserTeamsTest);
 router.post('/teams/:teamId/join/test', teamController.sendJoinRequestTest);
 router.delete('/teams/:teamId/join/test', teamController.unsendJoinRequestTest);
 router.delete('/teams/:teamId/leave/test', teamController.leaveTeamTest);
+
+// Notifications Routes
+router.get('/notifications', authenticateToken, notificationsController.getNotifications);
+router.put('/notifications/:notificationId/read', authenticateToken, notificationsController.markAsRead);
+router.post('/notifications', authenticateToken, notificationsController.createNotification);
+
 
 module.exports = router;
