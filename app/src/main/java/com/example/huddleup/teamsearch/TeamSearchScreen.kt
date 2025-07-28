@@ -1,6 +1,5 @@
 package com.example.huddleup.teamsearch
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -14,92 +13,101 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
-import androidx.navigation.compose.rememberNavController
 import com.example.huddleup.ui.theme.*
 
-// Data class to represent a team
-data class Team(
-    val id: String,
-    val name: String,
-    val members: Int,
-    val membershipState: TeamMembershipState
-)
-
-// Enum to represent the user's membership state with a team
-enum class TeamMembershipState {
-    MEMBER,
-    REQUESTED,
-    NOT_A_MEMBER
+@Composable
+fun SearchBar(
+    searchQuery: String,
+    onSearchQueryChange: (String) -> Unit,
+    placeholder: String
+) {
+    TextField(
+        value = searchQuery,
+        onValueChange = onSearchQueryChange,
+        placeholder = { Text(placeholder) },
+        leadingIcon = {
+            Icon(Icons.Default.Search, contentDescription = "Search Icon")
+        },
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(12.dp),
+        shape = RoundedCornerShape(12.dp),
+        singleLine = true,
+    )
 }
 
-// Dummy data for teams
-val sampleTeams = listOf(
-    Team("212231", "Team", 15, TeamMembershipState.NOT_A_MEMBER),
-    Team("212232", "Team A", 15, TeamMembershipState.MEMBER),
-    Team("212233", "Team B", 15, TeamMembershipState.REQUESTED),
-    Team("212234", "Team C", 15, TeamMembershipState.NOT_A_MEMBER),
-    Team("212235", "Team D", 15, TeamMembershipState.NOT_A_MEMBER),
-)
-
 @Composable
-fun TeamSearchScreen(navController: NavController) {
+fun TeamSearchScreen(
+    navController: NavController,
+    viewModel: TeamSearchViewModel = viewModel()
+) {
     var searchQuery by remember { mutableStateOf("") }
+    val searchResults by viewModel.searchResults.collectAsState()
+    val isLoading by viewModel.isLoading.collectAsState()
 
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(Cream)
-    ) {
-        // Top search bar section
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .background(RoseQuartz)
-                .padding(16.dp)
-        ) {
-            TextField(
-                value = searchQuery,
-                onValueChange = { searchQuery = it },
-                placeholder = { Text("Search for a team...", color = Color.Gray) },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .background(Color.White, RoundedCornerShape(8.dp)),
-                leadingIcon = { Icon(Icons.Default.Search, contentDescription = "Search Icon") },
-                colors = TextFieldDefaults.colors(
-                    focusedIndicatorColor = Color.Transparent,
-                    unfocusedIndicatorColor = Color.Transparent,
-                    disabledIndicatorColor = Color.Transparent
-                ),
-                shape = RoundedCornerShape(8.dp)
+    LaunchedEffect(searchQuery) {
+        viewModel.searchTeams(searchQuery)
+    }
+
+    Scaffold (
+        topBar = {
+            SearchBar(
+                searchQuery = searchQuery,
+                onSearchQueryChange = { searchQuery = it },
+                placeholder = "Search for a team..."
             )
         }
-
-        // Teams list
-        LazyColumn(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(horizontal = 16.dp),
-            verticalArrangement = Arrangement.spacedBy(10.dp),
-            contentPadding = PaddingValues(top = 16.dp, bottom = 16.dp)
+    ) {
+        Column(
+            modifier = Modifier.padding(top = it.calculateTopPadding(), start = 12.dp, end = 12.dp)
         ) {
-            items(sampleTeams.filter { it.name.contains(searchQuery, ignoreCase = true) || it.id.contains(searchQuery, ignoreCase = true) }) { team ->
-                TeamListItem(team = team)
+            if (isLoading) {
+                Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                    CircularProgressIndicator()
+                }
+            } else if (searchResults.isEmpty()) {
+                Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                    Text(text = "Search for a team using the searchbar...")
+                }
+            } else {
+                LazyColumn(
+                    modifier = Modifier.fillMaxSize(),
+                    verticalArrangement = Arrangement.spacedBy(4.dp),
+                    contentPadding = PaddingValues(top = 8.dp, bottom = 8.dp)
+                ) {
+                    items(searchResults) { team ->
+                        TeamListItem(
+                            team = team,
+                            onNavigate = { /* TODO: navController.navigate("details/${team.id}") */ },
+                            onJoin = { viewModel.sendJoinRequest(team.id, searchQuery) },
+                            onLeave = { viewModel.leaveTeam(team.id, searchQuery) },
+                            onCancelRequest = { viewModel.unsendJoinRequest(team.id, searchQuery) }
+                        )
+                    }
+                }
             }
         }
     }
 }
 
 @Composable
-fun TeamListItem(team: Team) {
+fun TeamListItem(
+    team: Team,
+    onNavigate: () -> Unit,
+    onJoin: () -> Unit,
+    onLeave: () -> Unit,
+    onCancelRequest: () -> Unit
+) {
     Card(
         modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(12.dp),
         elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
-        colors = CardDefaults.cardColors(containerColor = Color.White)
+        colors = CardDefaults.cardColors(containerColor = Color.White),
+        onClick = onNavigate
     ) {
         Row(
             modifier = Modifier
@@ -109,10 +117,17 @@ fun TeamListItem(team: Team) {
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
             Column {
-                Text(
-                    text = "${team.name} (ID#${team.id})",
-                    style = TextStyle(fontWeight = FontWeight.Bold, fontSize = 16.sp)
-                )
+                Row (verticalAlignment = Alignment.CenterVertically) {
+                    Text(
+                        text = team.name,
+                        style = TextStyle(fontWeight = FontWeight.Bold, fontSize = 16.sp)
+                    )
+                    Spacer(modifier = Modifier.padding(2.dp))
+                    Text(
+                        text = "#${team.id}",
+                        style = TextStyle(fontSize = 12.sp, color = Color.Gray)
+                    )
+                }
                 Spacer(modifier = Modifier.height(4.dp))
                 Text(
                     text = "${team.members} members",
@@ -122,39 +137,30 @@ fun TeamListItem(team: Team) {
 
             when (team.membershipState) {
                 TeamMembershipState.NOT_A_MEMBER -> Button(
-                    onClick = { /* Handle Join */ },
+                    onClick = onJoin,
                     colors = ButtonDefaults.buttonColors(containerColor = Coral),
                     shape = RoundedCornerShape(8.dp)
                 ) {
                     Text("Join", color = Color.White)
                 }
                 TeamMembershipState.MEMBER -> Button(
-                    onClick = { /* Handle Leave */ },
+                    onClick = onLeave,
                     colors = ButtonDefaults.buttonColors(containerColor = LightPrimaryContainer, contentColor = CocoaBrown),
                     shape = RoundedCornerShape(8.dp)
                 ) {
                     Text("Leave")
                 }
                 TeamMembershipState.REQUESTED -> Button(
-                    onClick = { /* Handle Request Sent */ },
-                    enabled = false,
+                    onClick = onCancelRequest,
                     colors = ButtonDefaults.buttonColors(
                         disabledContainerColor = SurfaceVariantLight,
                         disabledContentColor = CocoaBrown
                     ),
                     shape = RoundedCornerShape(8.dp)
                 ) {
-                    Text("Requested")
+                    Text("Cancel")
                 }
             }
         }
     }
 }
-
-//@Preview(showBackground = true)
-//@Composable
-//fun TeamSearchScreenPreview() {
-//    HuddleUpTheme() {
-//        TeamSearchScreen(rememberNavController())
-//    }
-//}

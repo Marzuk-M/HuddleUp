@@ -18,14 +18,16 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.huddleup.auth.LoginScreen
 import com.example.huddleup.auth.SignUpScreen
+import com.example.huddleup.chat.ChatInboxScreen
 import com.example.huddleup.dashboard.DashboardScreen
 import com.example.huddleup.dashboard.GameDetailsScreen
 import com.example.huddleup.dashboard.ScheduleScreen
 import com.example.huddleup.dashboard.GroupChatScreen
-import com.example.huddleup.myleagues.MyLeaguesScreen
 import com.example.huddleup.myteams.MyTeamsScreen
 import com.example.huddleup.notifications.NotificationsScreen
+import com.example.huddleup.settings.ProfileScreen
 import com.example.huddleup.settings.SettingsScreen
+import com.example.huddleup.myteams.TeamDetails
 import com.example.huddleup.teamsearch.TeamSearchScreen
 import com.example.huddleup.ui.theme.HuddleUpTheme
 import com.example.huddleup.ui.theme.ThemeViewModel
@@ -76,25 +78,20 @@ class MainActivity : ComponentActivity() {
                         composable(route = Routes.SIGNUP) { SignUpScreen(navController) }
                         composable(route = Routes.DASHBOARD) { DashboardScreen(navController) }
                         composable(route = Routes.SETTINGS) { SettingsScreen(navController) }
-                        composable(route = Routes.NOTIFICATION) {
-                            NotificationsScreen(
-                                navController
-                            )
-                        }
-                        composable(route = Routes.TEAM_SEARCH) {
-                            TeamSearchScreen(
-                                navController
-                            )
-                        }
+                        composable(route = Routes.NOTIFICATION) { NotificationsScreen(navController) }
+                        composable(route = Routes.TEAM_SEARCH) { TeamSearchScreen(navController) }
                         composable(route = Routes.SCHEDULE) { ScheduleScreen(navController) }
                         composable(route = Routes.GAME_DETAILS_WITH_ARG) { backStackEntry ->
                             val gameId = backStackEntry.arguments?.getString("gameId")
                             GameDetailsScreen(navController,gameId)
                         }
+                        composable(route = Routes.SETTINGS) { SettingsScreen(navController) }
+                        composable(route = Routes.TEAM_DETAILS) { TeamDetails(navController) }
+                        composable(route = Routes.PROFILE) { ProfileScreen(navController) }
 
                         composable(route = Routes.GROUP_CHAT) { GroupChatScreen(navController) }
+                        composable(route = Routes.CHAT_INBOX) { ChatInboxScreen(navController) }
                         composable(route = Routes.MY_TEAMS) { MyTeamsScreen(navController) }
-                        composable(route = Routes.MY_LEAGUES) { MyLeaguesScreen(navController) }
                         // TODO: ADD OTHER COMPOSABLE ROUTES HERE
                     }
                 }

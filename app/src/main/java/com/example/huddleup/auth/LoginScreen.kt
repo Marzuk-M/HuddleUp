@@ -21,6 +21,7 @@ import com.example.huddleup.sharedcomponents.HUTextButton
 import com.example.huddleup.sharedcomponents.HUTextField
 import com.example.huddleup.sharedcomponents.HUTextFieldSpacer
 import com.example.huddleup.sharedcomponents.PageHeader
+import androidx.compose.ui.graphics.Color
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -77,7 +78,6 @@ fun LoginScreen(
             HUTextFieldSpacer(modifier = Modifier.weight(1f))
 
             HUDividerWithText(text = "Don't have an account?")
-
             HUTextButton(
                 label = "Sign Up!",
                 onClick = { navController.navigate(Routes.SIGNUP) }
