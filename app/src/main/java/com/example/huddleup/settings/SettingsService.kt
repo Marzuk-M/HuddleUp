@@ -11,18 +11,6 @@ import io.ktor.client.request.setBody
 import io.ktor.client.request.header
 import io.ktor.http.ContentType
 import io.ktor.http.contentType
-import kotlinx.serialization.Serializable
-import kotlinx.serialization.json.Json
-
-@Serializable
-data class UpdateNameRequest(
-    val name: String
-)
-
-@Serializable
-data class UpdateNotificationRequest(
-    val notificationEnabled: Boolean
-)
 
 class SettingsService(private val client: HttpClient) {
 

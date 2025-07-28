@@ -10,3 +10,13 @@ data class UserProfile(
     val memberSince: String,
     val notificationEnabled: Boolean
 )
+
+@Serializable
+data class UpdateNameRequest(
+    val name: String
+)
+
+@Serializable
+data class UpdateNotificationRequest(
+    val notificationEnabled: Boolean
+)
