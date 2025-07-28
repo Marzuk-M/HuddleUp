@@ -18,6 +18,11 @@ object Endpoints {
     fun getMyTeamsEndpoint() = "$BASE_URL/api/teams/my-teams"
     fun getMyTeamsTestEndpoint() = "$BASE_URL/api/teams/my-teams/test"
 
+    // Settings Endpoints
+    fun getProfileEndpoint() = "$BASE_URL/api/settings/profile"
+    fun updateNameEndpoint() = "$BASE_URL/api/settings/name"
+    fun updateNotificationEndpoint() = "$BASE_URL/api/settings/notifications"
+  
     // Notifications Endpoints
     fun getNotificationsEndpoint() = "$BASE_URL/api/notifications"
     fun markNotificationAsReadEndpoint(notificationId: String) = "$BASE_URL/api/notifications/$notificationId/read"

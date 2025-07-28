@@ -6,6 +6,7 @@ const authController = require('./controllers/auth.controller');
 const dashboardController = require('./controllers/dashboard.controller');
 const teamController = require('./controllers/team.controller');
 
+const settingsController = require('./controllers/settings.controller');
 const notificationsController = require('./controllers/notifications.controller');
 const authenticateToken = require('./middlewares/auth.middleware');
 
@@ -33,6 +34,11 @@ router.get('/teams/my-teams/test', teamController.getUserTeamsTest);
 router.post('/teams/:teamId/join/test', teamController.sendJoinRequestTest);
 router.delete('/teams/:teamId/join/test', teamController.unsendJoinRequestTest);
 router.delete('/teams/:teamId/leave/test', teamController.leaveTeamTest);
+
+// Settings Routes
+router.get('/settings/profile', authenticateToken, settingsController.getUserProfile);
+router.put('/settings/name', authenticateToken, settingsController.updateUserName);
+router.put('/settings/notifications', authenticateToken, settingsController.updateNotificationSettings);
 
 // Notifications Routes
 router.get('/notifications', authenticateToken, notificationsController.getNotifications);
