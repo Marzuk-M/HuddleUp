@@ -9,40 +9,7 @@ import io.ktor.client.request.put
 import io.ktor.client.request.setBody
 import io.ktor.http.ContentType
 import io.ktor.http.contentType
-import kotlinx.serialization.Serializable
-import kotlinx.serialization.json.Json
 import java.time.LocalDate
-import java.time.format.DateTimeFormatter
-
-@Serializable
-data class GameResponse(
-    val id: String,
-    val teamId: String,
-    val teamName: String,
-    val opponent: String,
-    val date: String,
-    val time: String,
-    val place: String,
-    val availability: AvailabilityResponse
-)
-
-@Serializable
-data class AvailabilityResponse(
-    val `in`: List<String>,
-    val out: List<String>,
-    val maybe: List<String>
-)
-
-@Serializable
-data class AvailabilityUpdateRequest(
-    val status: String,
-    val userId: String? = null
-)
-
-@Serializable
-data class ApiResponse(
-    val message: String
-)
 
 class ScheduleService(private val client: HttpClient) {
 

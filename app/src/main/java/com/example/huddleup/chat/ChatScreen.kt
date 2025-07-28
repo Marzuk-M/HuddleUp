@@ -41,7 +41,7 @@ fun ChatScreen(
             ChatScreenHeader(
                 teamName = teamName,
                 teamId = teamId,
-                viewTeamDetail = { /*TODO: navController.navigate("")*/ }
+                viewTeamDetail = { navController.navigate("team_details/${teamId}") }
             )
         }
     }) { innerPadding ->

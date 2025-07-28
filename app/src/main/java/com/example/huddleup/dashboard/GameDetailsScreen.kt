@@ -1,6 +1,5 @@
 package com.example.huddleup.dashboard
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -13,7 +12,6 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.google.firebase.auth.FirebaseAuth
-import java.time.LocalDate
 
 val gameAvailability = mutableStateMapOf<Int, MutableMap<String, String>>() // gameId -> (email -> status)
 
@@ -122,14 +120,6 @@ fun GameDetailsScreen(
             }
 
             Spacer(modifier = Modifier.weight(1f))
-            Button(
-                onClick = { navController.navigate(com.example.huddleup.Routes.SCHEDULE) },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(bottom = 4.dp)
-            ) {
-                Text("Back to Schedule")
-            }
         } else {
             Text("Game not found", color = MaterialTheme.colorScheme.error)
         }

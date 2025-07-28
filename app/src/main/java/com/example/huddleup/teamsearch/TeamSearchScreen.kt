@@ -5,6 +5,8 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -66,6 +68,17 @@ fun TeamSearchScreen(
                 onSearchQueryChange = { searchQuery = it },
                 placeholder = "Search by team name or ID..."
             )
+        },
+        floatingActionButton = {
+            FloatingActionButton(
+                onClick = { /*TODO:CREATE TEAM*/ },
+                modifier = Modifier.padding(bottom = 2.dp)
+            ) {
+                Icon(
+                    imageVector = Icons.Default.Add,
+                    contentDescription = "Create New Team"
+                )
+            }
         }
     ) {
         Column(
@@ -88,7 +101,7 @@ fun TeamSearchScreen(
                     items(searchResults) { team ->
                         TeamListItem(
                             team = team,
-                            onNavigate = { /* TODO: navController.navigate("details/${team.id}") */ },
+                            onNavigate = { navController.navigate("team_details/${team.id}") },
                             onJoin = { viewModel.sendJoinRequest(team.id, searchQuery) },
                             onLeave = { viewModel.leaveTeam(team.id, searchQuery) },
                             onCancelRequest = { viewModel.unsendJoinRequest(team.id, searchQuery) }

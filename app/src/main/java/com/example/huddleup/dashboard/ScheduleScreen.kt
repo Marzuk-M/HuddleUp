@@ -21,18 +21,6 @@ import androidx.navigation.NavController
 import androidx.lifecycle.viewmodel.compose.viewModel
 import java.time.LocalDate
 
-// Game model with time
-data class Game(
-    val id: Int,
-    val originalId: String, // Store the original string ID from API
-    val team1: String,
-    val team2: String,
-    val date: LocalDate,
-    val time: String,
-    val place: String
-)
-
-
 @Composable
 fun CalendarView(
     selectedDate: LocalDate,

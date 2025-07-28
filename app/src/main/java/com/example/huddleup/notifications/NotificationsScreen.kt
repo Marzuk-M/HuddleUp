@@ -53,7 +53,7 @@ fun NotificationsScreen (
         floatingActionButton = {
             FloatingActionButton(
                 onClick = { viewModel.loadNotifications() },
-                modifier = Modifier.padding(bottom = 16.dp)
+                modifier = Modifier.padding(bottom = 2.dp)
             ) {
                 Icon(
                     imageVector = Icons.Default.Refresh,

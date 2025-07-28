@@ -66,7 +66,7 @@ fun MyTeamsScreen(
                     items(myTeams) { team ->
                         TeamListItem(
                             team = team,
-                            onNavigate = { /* TODO: Navigate to team details page */ },
+                            onNavigate = { navController.navigate("team_details/${team.id}") },
                             openChat = { navController.navigate("chat/${team.id}") },
                             leaveTeam = { viewModel.leaveTeam(team.id) }
                         )
