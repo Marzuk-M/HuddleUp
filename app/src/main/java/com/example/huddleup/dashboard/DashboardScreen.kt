@@ -27,6 +27,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.example.huddleup.sharedcomponents.PageHeader
 import androidx.navigation.NavController
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.huddleup.ui.theme.Cream
 import com.example.huddleup.ui.theme.RoseQuartz
 import java.time.LocalDate
@@ -35,10 +36,9 @@ import java.time.format.DateTimeFormatter
 @Composable
 fun DashboardScreen(
     navController: NavController,
+    viewModel: ScheduleViewModel = viewModel()
 ) {
-    val nextGame: Game? = allGames
-        .filter { it.date >= LocalDate.now() }
-        .minByOrNull { it.date }
+    val nextGame: Game? = viewModel.getNextGame()
 
     Column(
         modifier = Modifier
