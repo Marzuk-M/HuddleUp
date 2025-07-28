@@ -27,7 +27,11 @@ class MyTeamsViewModel : ViewModel() {
 
     fun leaveTeam(teamID: String) {
         viewModelScope.launch {
-            myTeamsService.leaveTeam(teamID)
+            val success = myTeamsService.leaveTeam(teamID)
+            if (success) {
+                // Refresh the list after leaving a team
+                getMyTeams()
+            }
         }
     }
 }
