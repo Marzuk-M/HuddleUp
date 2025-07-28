@@ -19,6 +19,7 @@ import androidx.navigation.compose.rememberNavController
 import com.example.huddleup.auth.LoginScreen
 import com.example.huddleup.auth.SignUpScreen
 import com.example.huddleup.chat.ChatScreen
+import com.example.huddleup.createteam.CreateTeamScreen
 import com.example.huddleup.dashboard.GameDetailsScreen
 import com.example.huddleup.dashboard.ScheduleScreen
 import com.example.huddleup.myteams.MyTeamsScreen
@@ -87,6 +88,7 @@ class MainActivity : ComponentActivity() {
                         }
 
                         composable(route = Routes.MY_TEAMS) { MyTeamsScreen(navController) }
+                        composable(route = Routes.NEW_TEAM) { CreateTeamScreen(navController) }
                         composable(route = Routes.CHAT) { backStackEntry ->
                             val teamId = backStackEntry.arguments?.getString("teamId")
                             ChatScreen(navController, teamId)

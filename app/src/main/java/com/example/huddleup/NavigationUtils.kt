@@ -9,6 +9,7 @@ object NavigationUtils {
     fun checkIfDisabledNavBarRoute(route: String): Boolean {
         if (route == Routes.LOGIN) return false
         if (route == Routes.SIGNUP) return false
+        if (route == Routes.NEW_TEAM) return false
         if (route.startsWith("chat/")) return false
         if (route.startsWith("team_details/")) return false
         return true // TODO: ADD LOGIC TO DISABLE THE NAVBAR FOR CERTAIN SCREENS

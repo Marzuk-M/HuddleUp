@@ -71,7 +71,7 @@ fun TeamSearchScreen(
         },
         floatingActionButton = {
             FloatingActionButton(
-                onClick = { /*TODO:CREATE TEAM*/ },
+                onClick = { navController.navigate("new_team") },
                 modifier = Modifier.padding(bottom = 2.dp)
             ) {
                 Icon(
