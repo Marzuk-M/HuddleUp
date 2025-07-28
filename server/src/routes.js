@@ -5,6 +5,9 @@ const router = express.Router();
 const authController = require('./controllers/auth.controller');
 const dashboardController = require('./controllers/dashboard.controller');
 const scheduleController = require('./controllers/schedule.controller');
+
+const notificationsController = require('./controllers/notifications.controller');
+
 const authenticateToken = require('./middlewares/auth.middleware');
 
 // Auth Routes
@@ -25,5 +28,10 @@ router.get('/schedule/games', authenticateToken, scheduleController.getAllGames)
 router.get('/schedule/games/:gameId', authenticateToken, scheduleController.getGameDetails);
 router.post('/schedule/games', authenticateToken, scheduleController.createGame);
 router.put('/schedule/games/:gameId/availability', authenticateToken, scheduleController.updateGameAvailability);
+
+// Notifications Routes
+router.get('/notifications', authenticateToken, notificationsController.getNotifications);
+router.put('/notifications/:notificationId/read', authenticateToken, notificationsController.markAsRead);
+router.post('/notifications', authenticateToken, notificationsController.createNotification);
 
 module.exports = router;

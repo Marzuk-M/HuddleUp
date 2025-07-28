@@ -11,4 +11,9 @@ object Endpoints {
     fun getScheduleGamesTestEndpoint() = "$BASE_URL/api/schedule/games/test"
     fun getGameDetailsTestEndpoint(gameId: String) = "$BASE_URL/api/schedule/games/$gameId/test"
     fun getUpdateAvailabilityTestEndpoint(gameId: String) = "$BASE_URL/api/schedule/games/$gameId/availability/test"
+
+    // Notifications Endpoints
+    fun getNotificationsEndpoint() = "$BASE_URL/api/notifications"
+    fun markNotificationAsReadEndpoint(notificationId: String) = "$BASE_URL/api/notifications/$notificationId/read"
+    fun createNotificationEndpoint() = "$BASE_URL/api/notifications"
 }
