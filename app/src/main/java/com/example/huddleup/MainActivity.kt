@@ -76,7 +76,7 @@ class MainActivity : ComponentActivity() {
                         composable(route = Routes.LOGIN) { LoginScreen(navController) }
                         composable(route = Routes.SIGNUP) { SignUpScreen(navController) }
                         composable(route = Routes.DASHBOARD) { DashboardScreen(navController) }
-                        composable(route = Routes.SETTINGS) { SettingsScreen(navController) }
+                        composable(route = Routes.SETTINGS) { SettingsScreen(navController = navController, themeViewModel = themeViewModel) }
                         composable(route = Routes.NOTIFICATION) { NotificationsScreen(navController) }
                         composable(route = Routes.TEAM_SEARCH) { TeamSearchScreen(navController) }
                         composable(route = Routes.SCHEDULE) { ScheduleScreen(navController) }
@@ -84,7 +84,7 @@ class MainActivity : ComponentActivity() {
                             val gameId = backStackEntry.arguments?.getString("gameId")
                             GameDetailsScreen(navController,gameId)
                         }
-                        composable(route = Routes.SETTINGS) { SettingsScreen(navController) }
+                        composable(route = Routes.SETTINGS) { SettingsScreen(navController = navController, themeViewModel = themeViewModel) }
                         composable(route = Routes.TEAM_DETAILS) { TeamDetails(navController) }
                         composable(route = Routes.PROFILE) { ProfileScreen(navController) }
 

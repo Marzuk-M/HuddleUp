@@ -17,7 +17,6 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.huddleup.Routes
 import com.example.huddleup.sharedcomponents.PageHeader
-import com.example.huddleup.ui.theme.CocoaBrown
 import com.example.huddleup.sharedcomponents.HUDividerWithText
 import com.example.huddleup.sharedcomponents.HUTextButton
 import com.example.huddleup.sharedcomponents.HUTextField
@@ -38,6 +37,7 @@ fun SignUpScreen(
     var email = remember { mutableStateOf("") }
     var password = remember { mutableStateOf("") }
     var confirmPassword = remember { mutableStateOf("") }
+    val colors = MaterialTheme.colorScheme
 
     Scaffold(topBar = { PageHeader(title = "HuddleUp") }) {
         Column(
@@ -121,8 +121,8 @@ fun SignUpScreen(
                     width = 3.dp,
                 ),
                 colors = ButtonDefaults.outlinedButtonColors(
-                    containerColor = CocoaBrown.copy(alpha = 0.3f),
-                    contentColor = CocoaBrown
+                    containerColor = colors.primaryContainer,
+                    contentColor = colors.primary
                 )
             ) {
                 Text(text = "Sign Up!", fontWeight = FontWeight.Bold)

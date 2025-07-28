@@ -13,30 +13,21 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.example.huddleup.sharedcomponents.PageHeader
 
 @Composable
 fun NotificationsScreen(
     navController: NavController
 ) {
+    val colors = MaterialTheme.colorScheme
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color(0xFFF6ECEC))
+            .background(colors.background)
             .padding(16.dp)
     ) {
         // Header
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.Center,
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Text(
-                text = "Notifications 🔔",
-                fontSize = 36.sp,
-                fontWeight = FontWeight.SemiBold,
-                color = Color.Black
-            )
-        }
+        PageHeader(title = "Notifications")
 
         Spacer(modifier = Modifier.height(16.dp))
 
@@ -65,10 +56,9 @@ fun SectionHeader(title: String) {
         Divider(modifier = Modifier.weight(1f), color = Color.DarkGray, thickness = 1.dp)
         Text(
             text = title,
-            fontSize = 24.sp,
-            fontWeight = FontWeight.Bold,
+            fontSize = 16.sp,
             modifier = Modifier.padding(horizontal = 8.dp),
-            color = Color.Black
+            style = MaterialTheme.typography.titleMedium
         )
         Divider(modifier = Modifier.weight(1f), color = Color.DarkGray, thickness = 1.dp)
     }
@@ -76,11 +66,12 @@ fun SectionHeader(title: String) {
 
 @Composable
 fun NotificationItem(message: String) {
+    val colors = MaterialTheme.colorScheme
     Box(
         modifier = Modifier
             .fillMaxWidth()
             .padding(vertical = 4.dp)
-            .background(Color(0xFFDCCCCC), shape = RoundedCornerShape(12.dp))
+            .background(colors.primaryContainer, shape = RoundedCornerShape(12.dp))
             .padding(12.dp)
     ) {
         Text(text = message, color = Color.Black)

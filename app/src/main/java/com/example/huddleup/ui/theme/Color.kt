@@ -1,61 +1,43 @@
 package com.example.huddleup.ui.theme
 
-import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.lightColorScheme
+import androidx.compose.material3.darkColorScheme
 import androidx.compose.ui.graphics.Color
 
-// ------------------------------- Colours --------------------------------- //
+// 🎨 Softer 3-Color Theme
+val CreamWhite = Color(0xFFFFFBFE)    // Light background
+val SkyBlue = Color(0xFF5A9EE6)       // Primary (softer blue)
+val SoftGrayBlue = Color(0xFFE6EEF6)  // Surface (cards/TextField bg)
+val AccentGray = Color(0xFF9CA9B5)    // Outline and hints
 
-// Basic Colours
-val colourWhite = Color.White
-val colourBlack = Color.Black
-
-// Base palette
-val Cream = Color(0xFFF9F1F0)
-val RoseQuartz = Color(0xFFFADCD9)
-val DustyRose = Color(0xFFF8AFA6)
-val Coral = Color(0xFFF79489)
-
-// Soft cocoa / rosewood tones for text contrast
-val CocoaBrown = Color(0xFF5C3A38)
-val RosewoodText = Color(0xFF6E4C4A)
-val BlushText = Color(0xFF4A3B3B)
-
-// Light container shades
-val LightPrimaryContainer = Color(0xFFFDD7D3)
-val LightSecondaryContainer = Color(0xFFFCE9E7)
-val SurfaceVariantLight = Color(0xFFF7E4E2)
-
-// ---------------------------- Colour Schemes ----------------------------- //
-
-// Light colour scheme
 val LightColorScheme = lightColorScheme(
-    primary = Coral,
-    onPrimary = colourWhite,
-    secondary = DustyRose,
-    onSecondary = CocoaBrown,
-    background = Cream,
-    onBackground = RosewoodText,
-    surface = RoseQuartz,
-    onSurface = BlushText,
-    primaryContainer = LightPrimaryContainer,
-    secondaryContainer = LightSecondaryContainer,
-    surfaceVariant = SurfaceVariantLight,
-    onSurfaceVariant = CocoaBrown
+    primary = SkyBlue,
+    onPrimary = Color.White,
+
+    background = CreamWhite,
+    onBackground = Color(0xFF222222),
+
+    surface = SoftGrayBlue,
+    onSurface = Color(0xFF111111),
+
+    outline = AccentGray,
+    onSurfaceVariant = Color(0xFF222222),
+    surfaceVariant = SoftGrayBlue,
+    tertiary = SkyBlue
 )
 
-// Dark colour scheme
 val DarkColorScheme = darkColorScheme(
-    primary = Coral,
-    onPrimary = colourBlack,
-    secondary = DustyRose,
-    onSecondary = colourWhite,
-    background = CocoaBrown,
-    onBackground = Cream,
-    surface = RosewoodText,
-    onSurface = Cream,
-    primaryContainer = CocoaBrown,
-    secondaryContainer = RosewoodText,
-    surfaceVariant = BlushText,
-    onSurfaceVariant = Cream
+    primary = SkyBlue,
+    onPrimary = Color(0xFF0F0F0F),
+
+    background = Color(0xFF1A1A1A),      // softer dark
+    onBackground = Color(0xFFF5F5F5),    // off-white
+
+    surface = Color(0xFF242424),         // dark gray surface
+    onSurface = Color(0xFFEAEAEA),       // softer white text
+
+    outline = Color(0xFF7B8995),         // muted gray outline
+    onSurfaceVariant = Color(0xFFF0F0F0),
+    surfaceVariant = Color(0xFF2E2E2E),
+    tertiary = SkyBlue
 )

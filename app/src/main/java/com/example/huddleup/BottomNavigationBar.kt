@@ -14,6 +14,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.navigation.NavController
+import androidx.compose.material3.*
 
 data class NavItem (
     val label: String,
@@ -65,8 +66,16 @@ fun BottomNavigationBar (
                     }
                 },
                 icon = {
-                    Icon(imageVector = navItem.icon, contentDescription = navItem.label)
-                }
+                    Icon(
+                        imageVector = navItem.icon,
+                        contentDescription = navItem.label
+                    )
+                },
+                colors = NavigationBarItemDefaults.colors(
+                    selectedIconColor = MaterialTheme.colorScheme.primary,
+                    unselectedIconColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f),
+                    indicatorColor = MaterialTheme.colorScheme.surfaceVariant // optional, or transparent
+                )
             )
         }
     }

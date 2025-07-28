@@ -27,8 +27,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.example.huddleup.sharedcomponents.PageHeader
 import androidx.navigation.NavController
-import com.example.huddleup.ui.theme.Cream
-import com.example.huddleup.ui.theme.RoseQuartz
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
@@ -39,11 +37,12 @@ fun DashboardScreen(
     val nextGame: Game? = allGames
         .filter { it.date >= LocalDate.now() }
         .minByOrNull { it.date }
+    val colors = MaterialTheme.colorScheme
 
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .background(Cream)
+            .background(colors.background)
             .padding(horizontal = 16.dp, vertical = 8.dp)
     ) {
         PageHeader(title = "HuddleUp")
@@ -56,7 +55,7 @@ fun DashboardScreen(
                 }
             },
             shape = RoundedCornerShape(20.dp),
-            colors = CardDefaults.cardColors(containerColor = RoseQuartz),
+            colors = CardDefaults.cardColors(containerColor = colors.primaryContainer),
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 16.dp, vertical = 8.dp)
