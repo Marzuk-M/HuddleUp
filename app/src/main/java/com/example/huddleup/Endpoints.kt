@@ -11,4 +11,9 @@ object Endpoints {
     fun getProfileEndpoint() = "$BASE_URL/api/settings/profile"
     fun updateNameEndpoint() = "$BASE_URL/api/settings/name"
     fun updateNotificationEndpoint() = "$BASE_URL/api/settings/notifications"
+  
+    // Notifications Endpoints
+    fun getNotificationsEndpoint() = "$BASE_URL/api/notifications"
+    fun markNotificationAsReadEndpoint(notificationId: String) = "$BASE_URL/api/notifications/$notificationId/read"
+    fun createNotificationEndpoint() = "$BASE_URL/api/notifications"
 }
