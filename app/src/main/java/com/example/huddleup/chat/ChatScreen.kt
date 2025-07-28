@@ -1,5 +1,3 @@
-@file:OptIn(ExperimentalMaterial3Api::class)
-
 package com.example.huddleup.chat
 
 import androidx.compose.foundation.background
@@ -8,7 +6,6 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Send
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -43,23 +40,9 @@ fun ChatScreen(
         )
     }
 
-    Scaffold(
-        topBar = {
-            TopAppBar(
-                navigationIcon = {
-                    IconButton(onClick = { navController.popBackStack() }) {
-                        Icon(Icons.Default.ArrowBack, contentDescription = "Back")
-                    }
-                },
-                title = { Text("Team X (${teamId.orEmpty()})") }
-            )
-        }
-    ) { innerPadding ->
+    Scaffold (topBar = { PageHeader(title = "Team X (ID#${teamId})") }) {
         Column(
-            modifier = Modifier
-                .padding(innerPadding)
-                .padding(horizontal = 16.dp)
-                .fillMaxSize()
+            modifier = Modifier.padding(top = it.calculateTopPadding(), start = 16.dp, end = 16.dp)
         ) {
             LazyColumn(
                 modifier = Modifier
@@ -84,9 +67,6 @@ fun ChatScreen(
                     onValueChange = { draft = it },
                     modifier = Modifier.weight(1f),
                     placeholder = { Text("Type a message") },
-                    colors = TextFieldDefaults.textFieldColors(
-                        containerColor = MaterialTheme.colorScheme.surfaceVariant
-                    )
                 )
 
                 Spacer(modifier = Modifier.width(8.dp))
