@@ -11,6 +11,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.huddleup.sharedcomponents.HUDividerWithText
 import com.google.firebase.auth.FirebaseAuth
 
 val gameAvailability = mutableStateMapOf<Int, MutableMap<String, String>>() // gameId -> (email -> status)
@@ -104,17 +105,15 @@ fun GameDetailsScreen(
             )
             Spacer(modifier = Modifier.height(24.dp))
 
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceEvenly
-            ) {
+            Column (modifier = Modifier.fillMaxWidth()) {
+
+                HUDividerWithText("IN")
                 Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                    Text("IN", style = MaterialTheme.typography.titleSmall)
                     inUsers.forEach { Text(it) }
                 }
 
+                HUDividerWithText("OUT")
                 Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                    Text("OUT", style = MaterialTheme.typography.titleSmall)
                     outUsers.forEach { Text(it) }
                 }
             }
