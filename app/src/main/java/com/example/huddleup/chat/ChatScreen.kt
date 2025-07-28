@@ -3,6 +3,7 @@ package com.example.huddleup.chat
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Send
@@ -36,6 +37,14 @@ fun ChatScreen(
         }
     }
 
+    // Scroll to bottom whenever messages change
+    val listState = rememberLazyListState()
+    LaunchedEffect(messages.size) {
+        if (messages.isNotEmpty()) {
+            listState.scrollToItem(0)
+        }
+    }
+
     Scaffold (topBar = {
         if (!isLoading) {
             ChatScreenHeader(
@@ -54,10 +63,11 @@ fun ChatScreen(
                 modifier = Modifier
                     .weight(1f)
                     .fillMaxSize(),
-                contentPadding = PaddingValues(vertical = 8.dp)
+                contentPadding = PaddingValues(vertical = 8.dp),
+                reverseLayout = true
             ) {
                 item {
-                    messages.reversed().forEach { message ->
+                    messages.forEach { message ->
                         ChatBubble(
                             message = message,
                             isMine = message.sender.username == currentUsername
