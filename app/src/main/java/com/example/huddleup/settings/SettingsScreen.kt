@@ -1,5 +1,6 @@
 package com.example.huddleup.settings
 
+import androidx.compose.runtime.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
@@ -10,11 +11,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.huddleup.sharedcomponents.PageHeader
-import com.example.huddleup.ui.theme.Cream
-
-import androidx.compose.runtime.*
-
-
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.clickable
@@ -26,10 +22,12 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ChevronRight
 import androidx.compose.material.icons.filled.ExpandMore
 import androidx.compose.ui.text.font.FontWeight
+import com.example.huddleup.ui.theme.ThemeViewModel
 
 @Composable
 fun SettingsScreen(
-    navController: NavController
+    navController: NavController,
+    themeViewModel: ThemeViewModel
 ) {
     // Toggle state for Notifications
     var notificationsEnabled by remember { mutableStateOf(true) }
@@ -88,6 +86,9 @@ fun SettingsScreen(
                 ) // Back end ppl can add logic to this toggle *****
             }
 
+            // Dark Mode with toggle
+            ThemeToggleRow(themeViewModel = themeViewModel)
+
             // Help and Support
             HelpSupportExpandableItem(
                 title = "\uD83C\uDFA7 Help and Support",
@@ -138,7 +139,7 @@ fun HelpSupportExpandableItem(
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
             Column {
-                Text(text = title, style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold))
+                Text(text = title, style = MaterialTheme.typography.titleMedium)
                 Spacer(modifier = Modifier.height(2.dp))
                 Text(text = subtitle, style = MaterialTheme.typography.bodyMedium.copy(color = Color.Gray))
             }
@@ -162,5 +163,34 @@ fun HelpSupportExpandableItem(
                 )
             }
         }
+    }
+}
+
+@Composable
+fun ThemeToggleRow(themeViewModel: ThemeViewModel) {
+    // Collect dark theme state as a boolean
+    val isDarkTheme = themeViewModel.darkTheme.collectAsState().value
+
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(vertical = 12.dp),
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.SpaceBetween
+    ) {
+        Column {
+            Text(
+                text = "\uD83D\uDCA1 Dark Mode",
+                style = MaterialTheme.typography.titleMedium
+            )
+            Text(
+                text = "      Change for visibility",
+                style = MaterialTheme.typography.bodyMedium.copy(color = Color.Gray)
+            )
+        }
+        Switch(
+            checked = isDarkTheme,
+            onCheckedChange = { themeViewModel.setDarkTheme(it) }
+        )
     }
 }

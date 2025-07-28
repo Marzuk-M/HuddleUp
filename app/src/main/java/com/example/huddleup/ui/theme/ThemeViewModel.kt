@@ -1,17 +1,15 @@
 package com.example.huddleup.ui.theme
 
-import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 
-class ThemeViewModel: ViewModel() {
-    var isDarkMode = mutableStateOf(false)
-    private set
+class ThemeViewModel : ViewModel() {
+    private val _darkTheme = MutableStateFlow(false)
+    val darkTheme: StateFlow<Boolean> = _darkTheme.asStateFlow()
 
-    fun toggleTheme() {
-        viewModelScope.launch {
-            isDarkMode.value = !isDarkMode.value
-        }
+    fun setDarkTheme(enabled: Boolean) {
+        _darkTheme.value = enabled
     }
 }

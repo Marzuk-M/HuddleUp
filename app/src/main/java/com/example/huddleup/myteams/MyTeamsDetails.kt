@@ -98,9 +98,10 @@ fun TeamDetails(navController: NavController) {
 
 @Composable
 fun GameStatCard(result: String, team: String, date: String, rank: String, isWin: Boolean) {
+    val colors = MaterialTheme.colorScheme
     Card(
         shape = RoundedCornerShape(12.dp),
-        colors = CardDefaults.cardColors(containerColor = Color(0xFFDCCCCC)),
+        colors = CardDefaults.cardColors(containerColor = colors.primaryContainer),
         modifier = Modifier.fillMaxWidth()
     ) {
         Row(

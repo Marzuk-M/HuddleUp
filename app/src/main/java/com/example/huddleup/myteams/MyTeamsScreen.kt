@@ -100,7 +100,7 @@ fun TeamListItem(
                 Row (verticalAlignment = Alignment.CenterVertically) {
                     Text(
                         text = team.name,
-                        style = TextStyle(fontWeight = FontWeight.Bold, fontSize = 16.sp)
+                        style = TextStyle(fontWeight = FontWeight.Bold, fontSize = 16.sp, color = Color.Gray)
                     )
                     Spacer(modifier = Modifier.padding(2.dp))
                     Text(
@@ -111,7 +111,7 @@ fun TeamListItem(
                 Spacer(modifier = Modifier.height(4.dp))
                 Text(
                     text = "${team.members} members",
-                    style = TextStyle(fontSize = 14.sp, color = Color.Gray)
+                    style = TextStyle(fontSize = 14.sp, color = Color.Black)
                 )
             }
 

@@ -37,14 +37,5 @@ fun ProfileScreen(
             Text(text = "Member Since", fontWeight = FontWeight.Bold, fontSize = 14.sp)
             Text(text = "January 2024", fontSize = 16.sp)
         }
-
-        Button(
-            onClick = { navController.navigate(com.example.huddleup.Routes.SETTINGS) },
-            modifier = Modifier
-                .fillMaxWidth()
-                .align(Alignment.BottomCenter)
-        ) {
-            Text("Settings")
-        }
     }
 }

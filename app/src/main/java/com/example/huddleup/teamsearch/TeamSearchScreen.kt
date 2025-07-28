@@ -102,6 +102,7 @@ fun TeamListItem(
     onLeave: () -> Unit,
     onCancelRequest: () -> Unit
 ) {
+    val colors = MaterialTheme.colorScheme
     Card(
         modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(12.dp),
@@ -120,7 +121,7 @@ fun TeamListItem(
                 Row (verticalAlignment = Alignment.CenterVertically) {
                     Text(
                         text = team.name,
-                        style = TextStyle(fontWeight = FontWeight.Bold, fontSize = 16.sp)
+                        style = TextStyle(fontWeight = FontWeight.Bold, fontSize = 16.sp, color = Color.Black)
                     )
                     Spacer(modifier = Modifier.padding(2.dp))
                     Text(
@@ -138,14 +139,14 @@ fun TeamListItem(
             when (team.membershipState) {
                 TeamMembershipState.NOT_A_MEMBER -> Button(
                     onClick = onJoin,
-                    colors = ButtonDefaults.buttonColors(containerColor = Coral),
+                    colors = ButtonDefaults.buttonColors(containerColor = colors.primaryContainer),
                     shape = RoundedCornerShape(8.dp)
                 ) {
-                    Text("Join", color = Color.White)
+                    Text("Join", color = Color.Gray)
                 }
                 TeamMembershipState.MEMBER -> Button(
                     onClick = onLeave,
-                    colors = ButtonDefaults.buttonColors(containerColor = LightPrimaryContainer, contentColor = CocoaBrown),
+                    colors = ButtonDefaults.buttonColors(containerColor = colors.surfaceContainer, contentColor = Color.Gray),
                     shape = RoundedCornerShape(8.dp)
                 ) {
                     Text("Leave")
@@ -153,8 +154,8 @@ fun TeamListItem(
                 TeamMembershipState.REQUESTED -> Button(
                     onClick = onCancelRequest,
                     colors = ButtonDefaults.buttonColors(
-                        disabledContainerColor = SurfaceVariantLight,
-                        disabledContentColor = CocoaBrown
+                        disabledContainerColor = colors.secondaryContainer,
+                        disabledContentColor = Color.Gray
                     ),
                     shape = RoundedCornerShape(8.dp)
                 ) {
