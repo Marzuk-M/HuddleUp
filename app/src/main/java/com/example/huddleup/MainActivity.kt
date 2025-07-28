@@ -24,7 +24,6 @@ import com.example.huddleup.dashboard.GameDetailsScreen
 import com.example.huddleup.dashboard.ScheduleScreen
 import com.example.huddleup.myteams.MyTeamsScreen
 import com.example.huddleup.notifications.NotificationsScreen
-import com.example.huddleup.settings.ProfileScreen
 import com.example.huddleup.settings.SettingsScreen
 import com.example.huddleup.myteams.TeamDetails
 import com.example.huddleup.teamsearch.TeamSearchScreen
@@ -86,7 +85,6 @@ class MainActivity : ComponentActivity() {
                         }
                         composable(route = Routes.SETTINGS) { SettingsScreen(navController) }
                         composable(route = Routes.TEAM_DETAILS) { TeamDetails(navController) }
-                        composable(route = Routes.PROFILE) { ProfileScreen(navController) }
 
                         composable(route = Routes.MY_TEAMS) { MyTeamsScreen(navController) }
                         composable(route = Routes.CHAT) { backStackEntry ->

@@ -10,108 +10,137 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.huddleup.sharedcomponents.PageHeader
-import com.example.huddleup.ui.theme.Cream
-
 import androidx.compose.runtime.*
-
-
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.ui.draw.rotate
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.ChevronRight
-import androidx.compose.material.icons.filled.ExpandMore
+import androidx.compose.material.icons.filled.Edit
 import androidx.compose.ui.text.font.FontWeight
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.huddleup.Routes
+import com.example.huddleup.auth.AuthService
+import com.example.huddleup.sharedcomponents.HUDividerWithText
 
 @Composable
 fun SettingsScreen(
-    navController: NavController
+    navController: NavController,
+    viewModel: SettingsViewModel = viewModel()
 ) {
-    // Toggle state for Notifications
-    var notificationsEnabled by remember { mutableStateOf(true) }
+    val name by viewModel.name.collectAsState()
+    val email by viewModel.email.collectAsState()
+    val username by viewModel.username.collectAsState()
+    val memberSince by viewModel.memberSince.collectAsState()
+    val notificationEnabled by viewModel.notificationEnabled.collectAsState()
+    val isLoading by viewModel.isLoading.collectAsState()
+    val isLoadingName by viewModel.isLoadingName.collectAsState()
+    val isLoadingNotif by viewModel.isLoadingNotif.collectAsState()
 
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(horizontal = 16.dp, vertical = 8.dp)
-    ) {
+    LaunchedEffect(Unit) {
+        viewModel.getUserProfile()
+    }
+
+    Scaffold (topBar = { PageHeader(title = "Settings") }) {
         Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .align(Alignment.TopStart)
+            modifier = Modifier.padding(top = it.calculateTopPadding(), start = 16.dp, end = 16.dp)
         ) {
-            Spacer(modifier = Modifier.height(16.dp))
-            PageHeader(title = "Settings")
-            Spacer(modifier = Modifier.height(16.dp))
 
-            // Profile
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .clickable { navController.navigate(com.example.huddleup.Routes.PROFILE)}
-                    .padding(vertical = 12.dp),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.SpaceBetween
-            ) {
-                Column {
-                    Text(text = "\uD83D\uDC64 Profile", style = MaterialTheme.typography.titleMedium)
-                    Text(text = "      Account", style = MaterialTheme.typography.bodyMedium.copy(color = Color.Gray))
+            LazyColumn(modifier = Modifier.weight(1f)) {
+
+                // Profile
+                item {
+                    HUDividerWithText(text = "Profile")
+                    if (isLoading || isLoadingName) {
+                        Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                            CircularProgressIndicator()
+                        }
+                    } else {
+                        EditableUserProfileCard(
+                            name = name,
+                            email = email,
+                            username = username,
+                            memberSince = memberSince,
+                            onNameChange = { viewModel.updateName(it) }
+                        )
+                    }
                 }
-                Icon(
-                    imageVector = Icons.Default.ChevronRight,
-                    contentDescription = "Go",
-                    tint = Color.Gray,
-                    modifier = Modifier
-                        .size(28.dp)
-                )
+
+
+                // Notifications toggle
+                item {
+                    HUDividerWithText(text = "Notification")
+                    if (isLoading || isLoadingNotif) {
+                        Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                            CircularProgressIndicator()
+                        }
+                    } else {
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(vertical = 12.dp),
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.SpaceBetween
+                        ) {
+                            Column {
+                                Text(
+                                    text = "Notifications",
+                                    style = MaterialTheme.typography.titleMedium
+                                )
+                                Text(
+                                    text = "Enable push notification on your phone",
+                                    style = MaterialTheme.typography.bodyMedium.copy(color = Color.Gray)
+                                )
+                            }
+                            Switch(
+                                checked = notificationEnabled,
+                                onCheckedChange = { viewModel.updateNotification(!notificationEnabled) }
+                            )
+                        }
+                    }
+                }
+
+
+                // Help and Support
+                item {
+                    HUDividerWithText(text = "Help and Support")
+                    HelpSupportExpandableItem(
+                        title = "Help and Support",
+                        subtitle = "Policy Details",
+                        policyText = "Here is our policy: We value your privacy and ensure your data is protected. We don't have any third party connections and your data is secure."
+                    )
+                }
+
+                // About
+                item {
+                    HUDividerWithText(text = "About this App")
+                    HelpSupportExpandableItem(
+                        title = "About",
+                        subtitle = "More Information",
+                        policyText = "HuddleUp is a platform dedicated to helping individuals and teams stay connected, organized, and inspired. We believe in building intuitive tools that promote collaboration, personal growth, and productivity, whether you're planning your next meetup or just checking in with yourself. Our mission is to empower users through thoughtful design and reliable technology that supports real-world connection."
+                    )
+                }
             }
 
-            // Notifications with toggle
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(vertical = 12.dp),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.SpaceBetween
+            // Logout button at the bottom
+            Button(
+                onClick = {
+                    AuthService.logout {
+                        navController.navigate(Routes.LOGIN) {
+                            popUpTo(Routes.DASHBOARD) { inclusive = true }
+                        }
+                    }
+                },
+                modifier = Modifier.fillMaxWidth().padding(bottom = 16.dp)
             ) {
-                Column {
-                    Text(text = "\uD83D\uDD14 Notifications", style = MaterialTheme.typography.titleMedium)
-                    Text(text = "      View Reminders", style = MaterialTheme.typography.bodyMedium.copy(color = Color.Gray))
-                }
-                Switch(
-                    checked = notificationsEnabled,
-                    onCheckedChange = { notificationsEnabled = it }
-                ) // Back end ppl can add logic to this toggle *****
+                Text("Logout")
             }
-
-            // Help and Support
-            HelpSupportExpandableItem(
-                title = "\uD83C\uDFA7 Help and Support",
-                subtitle = "      Policy Details",
-                policyText = "Here is our policy: We value your privacy and ensure your data is protected. We don't have any third party connections and your data is secure."
-            )
-
-            // About
-            HelpSupportExpandableItem(
-                title = "❓ About",
-                subtitle = "      More Information",
-                policyText = "HuddleUp is a platform dedicated to helping individuals and teams stay connected, organized, and inspired. We believe in building intuitive tools that promote collaboration, personal growth, and productivity, whether you're planning your next meetup or just checking in with yourself. Our mission is to empower users through thoughtful design and reliable technology that supports real-world connection."
-            )
-        }
-
-        // Logout button at the bottom
-        Button(
-            onClick = { /* TODO: Call AuthService.logout() and navigate */ },
-            modifier = Modifier
-                .fillMaxWidth()
-                .align(Alignment.BottomCenter)
-                .padding(bottom = 16.dp)
-        ) {
-            Text("Logout")
         }
     }
 }
@@ -164,3 +193,79 @@ fun HelpSupportExpandableItem(
         }
     }
 }
+
+@Composable
+fun EditableUserProfileCard(
+    name: String,
+    email: String,
+    username: String,
+    memberSince: String,
+    onNameChange: (String) -> Unit
+) {
+    var isEditing by remember { mutableStateOf(false) }
+    var editableName by remember { mutableStateOf(name) }
+
+    LaunchedEffect(name) {
+        if (!isEditing) {
+            editableName = name
+        }
+    }
+
+    Card(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(vertical = 8.dp),
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant)
+    ) {
+        Column(modifier = Modifier.padding(16.dp)) {
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.SpaceBetween,
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                if (isEditing) {
+                    OutlinedTextField(
+                        value = editableName,
+                        onValueChange = { editableName = it },
+                        modifier = Modifier.weight(1f),
+                        singleLine = true,
+                        textStyle = MaterialTheme.typography.titleMedium,
+                        label = { Text("Name") }
+                    )
+                    IconButton(onClick = {
+                        isEditing = false
+                        onNameChange(editableName)
+                    }) {
+                        Icon(Icons.Default.Check, contentDescription = "Save")
+                    }
+                } else {
+                    Text(
+                        text = editableName,
+                        style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold),
+                        modifier = Modifier.weight(1f)
+                    )
+                    IconButton(onClick = { isEditing = true }) {
+                        Icon(Icons.Default.Edit, contentDescription = "Edit Name")
+                    }
+                }
+            }
+
+            Spacer(modifier = Modifier.height(4.dp))
+            Text(
+                text = username,
+                style = MaterialTheme.typography.bodyMedium.copy(color = Color.Gray)
+            )
+            Spacer(modifier = Modifier.height(4.dp))
+            Text(
+                text = email,
+                style = MaterialTheme.typography.bodyMedium.copy(color = Color.Gray)
+            )
+            Spacer(modifier = Modifier.height(4.dp))
+            Text(
+                text = "Member since $memberSince",
+                style = MaterialTheme.typography.bodySmall.copy(color = Color.Gray)
+            )
+        }
+    }
+}
+
