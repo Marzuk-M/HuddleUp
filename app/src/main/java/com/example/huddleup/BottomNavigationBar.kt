@@ -43,11 +43,6 @@ fun BottomNavigationBar (
             route = Routes.MY_TEAMS
         ),
         NavItem(
-            label = "Chat Inbox",
-            icon = Icons.Default.ChatBubble,
-            route = Routes.CHAT_INBOX
-        ),
-        NavItem(
             label = "Notifications",
             icon = Icons.Default.Notifications,
             route = Routes.NOTIFICATION

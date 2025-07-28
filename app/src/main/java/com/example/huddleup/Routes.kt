@@ -13,11 +13,10 @@ object Routes {
 
     const val SCHEDULE = "schedule"
 
-    const val GROUP_CHAT = "group_chat"
     const val MY_TEAMS = "my_teams"
-
-    const val CHAT_INBOX = "chat_inbox"
     const val GAME_DETAILS = "game_details"
     const val GAME_DETAILS_WITH_ARG = "game_details/{gameId}"
     const val TEAM_DETAILS = "details"
+
+    const val CHAT = "chat/{teamId}"
 }

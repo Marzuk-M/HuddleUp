@@ -10,16 +10,16 @@ import androidx.navigation.NavController
 import com.example.huddleup.sharedcomponents.HUTextFieldSpacer
 import com.example.huddleup.sharedcomponents.PageHeader
 
-
 @Composable
-fun ChatInboxScreen(
-    navController: NavController
+fun ChatScreen(
+    navController: NavController,
+    teamId: String?
 ) {
-    Scaffold(topBar = { PageHeader(title = "Your Inbox") }) {
+    Scaffold(topBar = { PageHeader(title = "Team X (${teamId})") }) {
         Column(
             modifier = Modifier.padding(top = it.calculateTopPadding(), start = 16.dp, end = 16.dp)
         ) {
-            HUTextFieldSpacer()
+            
         }
     }
 }

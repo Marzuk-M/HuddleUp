@@ -94,11 +94,11 @@ fun DashboardScreen(
             onClick = { navController.navigate(com.example.huddleup.Routes.SCHEDULE) }
         )
 
-        DashboardNavItem(
-            title = "Chat",
-            subtitle = "Team messaging",
-            onClick = { navController.navigate(com.example.huddleup.Routes.GROUP_CHAT) }
-        )
+//        DashboardNavItem(
+//            title = "Chat",
+//            subtitle = "Team messaging",
+//            onClick = { navController.navigate(com.example.huddleup.Routes.CHAT_INBOX) }
+//        )
         DashboardNavItem(
             title = "Teams",
             subtitle = "Manage your teams",

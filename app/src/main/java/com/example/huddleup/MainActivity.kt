@@ -18,11 +18,10 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.huddleup.auth.LoginScreen
 import com.example.huddleup.auth.SignUpScreen
-import com.example.huddleup.chat.ChatInboxScreen
+import com.example.huddleup.chat.ChatScreen
 import com.example.huddleup.dashboard.DashboardScreen
 import com.example.huddleup.dashboard.GameDetailsScreen
 import com.example.huddleup.dashboard.ScheduleScreen
-import com.example.huddleup.dashboard.GroupChatScreen
 import com.example.huddleup.myteams.MyTeamsScreen
 import com.example.huddleup.notifications.NotificationsScreen
 import com.example.huddleup.settings.ProfileScreen
@@ -89,9 +88,11 @@ class MainActivity : ComponentActivity() {
                         composable(route = Routes.TEAM_DETAILS) { TeamDetails(navController) }
                         composable(route = Routes.PROFILE) { ProfileScreen(navController) }
 
-                        composable(route = Routes.GROUP_CHAT) { GroupChatScreen(navController) }
-                        composable(route = Routes.CHAT_INBOX) { ChatInboxScreen(navController) }
                         composable(route = Routes.MY_TEAMS) { MyTeamsScreen(navController) }
+                        composable(route = Routes.CHAT) { backStackEntry ->
+                            val teamId = backStackEntry.arguments?.getString("teamId")
+                            ChatScreen(navController, teamId)
+                        }
                         // TODO: ADD OTHER COMPOSABLE ROUTES HERE
                     }
                 }
