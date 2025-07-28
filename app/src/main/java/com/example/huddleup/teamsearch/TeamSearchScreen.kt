@@ -49,8 +49,16 @@ fun TeamSearchScreen(
     val searchResults by viewModel.searchResults.collectAsState()
     val isLoading by viewModel.isLoading.collectAsState()
 
+    // Trigger initial search when screen loads
+    LaunchedEffect(Unit) {
+        viewModel.searchTeams("")
+    }
+    
+    // Search when query changes
     LaunchedEffect(searchQuery) {
-        viewModel.searchTeams(searchQuery)
+        if (searchQuery.isNotEmpty()) {
+            viewModel.searchTeams(searchQuery)
+        }
     }
 
     Scaffold (
@@ -58,7 +66,7 @@ fun TeamSearchScreen(
             SearchBar(
                 searchQuery = searchQuery,
                 onSearchQueryChange = { searchQuery = it },
-                placeholder = "Search for a team..."
+                placeholder = "Search by team name or ID..."
             )
         }
     ) {
@@ -71,7 +79,7 @@ fun TeamSearchScreen(
                 }
             } else if (searchResults.isEmpty()) {
                 Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                    Text(text = "Search for a team using the searchbar...")
+                    Text(text = if (searchQuery.isEmpty()) "No teams found" else "No teams match your search")
                 }
             } else {
                 LazyColumn(

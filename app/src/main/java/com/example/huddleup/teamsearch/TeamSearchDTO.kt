@@ -10,7 +10,7 @@ data class Team(
 
 // Enum to represent the user's membership state with a team
 enum class TeamMembershipState {
-    MEMBER,
-    REQUESTED,
-    NOT_A_MEMBER
+    MEMBER,        // User is a member of the team
+    REQUESTED,     // User has requested to join (legacy - no longer used)
+    NOT_A_MEMBER   // User is not a member
 }

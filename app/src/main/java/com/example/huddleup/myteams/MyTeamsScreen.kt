@@ -22,13 +22,16 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ChatBubble
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.OutlinedButton
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.huddleup.sharedcomponents.PageHeader
+import com.example.huddleup.ui.theme.CocoaBrown
+import com.example.huddleup.ui.theme.LightPrimaryContainer
 
 @Composable
 fun MyTeamsScreen(
@@ -97,17 +100,10 @@ fun TeamListItem(
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
             Column {
-                Row (verticalAlignment = Alignment.CenterVertically) {
-                    Text(
-                        text = team.name,
-                        style = TextStyle(fontWeight = FontWeight.Bold, fontSize = 16.sp)
-                    )
-                    Spacer(modifier = Modifier.padding(2.dp))
-                    Text(
-                        text = "#${team.id}",
-                        style = TextStyle(fontSize = 12.sp, color = Color.Gray)
-                    )
-                }
+                Text(
+                    text = team.name,
+                    style = TextStyle(fontWeight = FontWeight.Bold, fontSize = 16.sp)
+                )
                 Spacer(modifier = Modifier.height(4.dp))
                 Text(
                     text = "${team.members} members",
@@ -115,21 +111,24 @@ fun TeamListItem(
                 )
             }
 
-            Column {
-                Row (horizontalArrangement = Arrangement.spacedBy(4.dp) ) {
-                    IconButton(onClick = openChat) {
-                        Icon(
-                            imageVector = Icons.Filled.ChatBubble,
-                            contentDescription = "Open Chat"
-                        )
-                    }
+            Row (horizontalArrangement = Arrangement.spacedBy(8.dp) ) {
+                IconButton(onClick = openChat) {
+                    Icon(
+                        imageVector = Icons.Filled.ChatBubble,
+                        contentDescription = "Open Chat"
+                    )
+                }
 
-                    OutlinedButton(
-                        shape = RoundedCornerShape(8.dp),
-                        onClick = leaveTeam
-                    ) {
-                        Text("Leave")
-                    }
+                Button(
+                    onClick = leaveTeam,
+                    colors = ButtonDefaults.buttonColors(containerColor = LightPrimaryContainer, contentColor = CocoaBrown),
+                    shape = RoundedCornerShape(8.dp)
+                ) {
+                    Text(
+                        text = "Leave",
+                        color = CocoaBrown,
+                        fontWeight = FontWeight.Medium
+                    )
                 }
             }
         }
