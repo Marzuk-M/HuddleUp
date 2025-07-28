@@ -42,9 +42,18 @@ fun SettingsScreen(
     val isLoading by viewModel.isLoading.collectAsState()
     val isLoadingName by viewModel.isLoadingName.collectAsState()
     val isLoadingNotif by viewModel.isLoadingNotif.collectAsState()
+    val errorMessage by viewModel.errorMessage.collectAsState()
 
     LaunchedEffect(Unit) {
         viewModel.getUserProfile()
+    }
+
+    // Show error message if there is one
+    errorMessage?.let { error ->
+        LaunchedEffect(error) {
+            // You could show a snackbar or toast here
+            viewModel.clearError()
+        }
     }
 
     Scaffold (topBar = { PageHeader(title = "Settings") }) {
@@ -57,18 +66,42 @@ fun SettingsScreen(
                 // Profile
                 item {
                     HUDividerWithText(text = "Profile")
-                    if (isLoading || isLoadingName) {
+                    if (isLoading) {
                         Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
                             CircularProgressIndicator()
                         }
-                    } else {
+                    } else if (name.isNotBlank()) {
                         EditableUserProfileCard(
                             name = name,
                             email = email,
                             username = username,
                             memberSince = memberSince,
-                            onNameChange = { viewModel.updateName(it) }
+                            onNameChange = { viewModel.updateName(it) },
+                            isLoadingName = isLoadingName
                         )
+                    } else {
+                        // Show error state or retry button
+                        Card(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(vertical = 8.dp),
+                            colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.errorContainer)
+                        ) {
+                            Column(modifier = Modifier.padding(16.dp)) {
+                                Text(
+                                    text = "Failed to load profile",
+                                    style = MaterialTheme.typography.titleMedium,
+                                    color = MaterialTheme.colorScheme.onErrorContainer
+                                )
+                                Spacer(modifier = Modifier.height(8.dp))
+                                Button(
+                                    onClick = { viewModel.getUserProfile() },
+                                    modifier = Modifier.align(Alignment.CenterHorizontally)
+                                ) {
+                                    Text("Retry")
+                                }
+                            }
+                        }
                     }
                 }
 
@@ -76,28 +109,26 @@ fun SettingsScreen(
                 // Notifications toggle
                 item {
                     HUDividerWithText(text = "Notification")
-                    if (isLoading || isLoadingNotif) {
-                        Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                            CircularProgressIndicator()
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(vertical = 12.dp),
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.SpaceBetween
+                    ) {
+                        Column {
+                            Text(
+                                text = "Notifications",
+                                style = MaterialTheme.typography.titleMedium
+                            )
+                            Text(
+                                text = "Enable push notification on your phone",
+                                style = MaterialTheme.typography.bodyMedium.copy(color = Color.Gray)
+                            )
                         }
-                    } else {
-                        Row(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(vertical = 12.dp),
-                            verticalAlignment = Alignment.CenterVertically,
-                            horizontalArrangement = Arrangement.SpaceBetween
-                        ) {
-                            Column {
-                                Text(
-                                    text = "Notifications",
-                                    style = MaterialTheme.typography.titleMedium
-                                )
-                                Text(
-                                    text = "Enable push notification on your phone",
-                                    style = MaterialTheme.typography.bodyMedium.copy(color = Color.Gray)
-                                )
-                            }
+                        if (isLoadingNotif) {
+                            CircularProgressIndicator(modifier = Modifier.size(24.dp))
+                        } else {
                             Switch(
                                 checked = notificationEnabled,
                                 onCheckedChange = { viewModel.updateNotification(!notificationEnabled) }
@@ -200,7 +231,8 @@ fun EditableUserProfileCard(
     email: String,
     username: String,
     memberSince: String,
-    onNameChange: (String) -> Unit
+    onNameChange: (String) -> Unit,
+    isLoadingName: Boolean
 ) {
     var isEditing by remember { mutableStateOf(false) }
     var editableName by remember { mutableStateOf(name) }
@@ -232,11 +264,15 @@ fun EditableUserProfileCard(
                         textStyle = MaterialTheme.typography.titleMedium,
                         label = { Text("Name") }
                     )
-                    IconButton(onClick = {
-                        isEditing = false
-                        onNameChange(editableName)
-                    }) {
-                        Icon(Icons.Default.Check, contentDescription = "Save")
+                    if (isLoadingName) {
+                        CircularProgressIndicator(modifier = Modifier.size(24.dp))
+                    } else {
+                        IconButton(onClick = {
+                            isEditing = false
+                            onNameChange(editableName)
+                        }) {
+                            Icon(Icons.Default.Check, contentDescription = "Save")
+                        }
                     }
                 } else {
                     Text(

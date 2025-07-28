@@ -49,6 +49,12 @@ fun TeamSearchScreen(
     val searchResults by viewModel.searchResults.collectAsState()
     val isLoading by viewModel.isLoading.collectAsState()
 
+    // Trigger initial search when screen loads
+    LaunchedEffect(Unit) {
+        viewModel.searchTeams("")
+    }
+    
+    // Search when query changes
     LaunchedEffect(searchQuery) {
         viewModel.searchTeams(searchQuery)
     }
@@ -58,7 +64,7 @@ fun TeamSearchScreen(
             SearchBar(
                 searchQuery = searchQuery,
                 onSearchQueryChange = { searchQuery = it },
-                placeholder = "Search for a team..."
+                placeholder = "Search by team name or ID..."
             )
         }
     ) {
@@ -71,7 +77,7 @@ fun TeamSearchScreen(
                 }
             } else if (searchResults.isEmpty()) {
                 Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                    Text(text = "Search for a team using the searchbar...")
+                    Text(text = if (searchQuery.isEmpty()) "No teams found" else "No teams match your search")
                 }
             } else {
                 LazyColumn(
@@ -117,17 +123,15 @@ fun TeamListItem(
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
             Column {
-                Row (verticalAlignment = Alignment.CenterVertically) {
-                    Text(
-                        text = team.name,
-                        style = TextStyle(fontWeight = FontWeight.Bold, fontSize = 16.sp)
-                    )
-                    Spacer(modifier = Modifier.padding(2.dp))
-                    Text(
-                        text = "#${team.id}",
-                        style = TextStyle(fontSize = 12.sp, color = Color.Gray)
-                    )
-                }
+                Text(
+                    text = team.name,
+                    style = TextStyle(fontWeight = FontWeight.Bold, fontSize = 16.sp)
+                )
+                Spacer(modifier = Modifier.padding(4.dp))
+                Text(
+                    text = "#${team.id}",
+                    style = TextStyle(fontSize = 12.sp, color = Color.Gray)
+                )
                 Spacer(modifier = Modifier.height(4.dp))
                 Text(
                     text = "${team.members} members",
